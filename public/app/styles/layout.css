@@ -1,0 +1,254 @@
+/* ═══════════════════════════════════════════════
+   NeoGen Design System — Layout
+   .container, .header, .nav-tabs, .tab-btn, .ad-container
+   ═══════════════════════════════════════════════ */
+
+/* ── Layout ──────────────────────────────────── */
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 24px 48px;
+}
+
+/* ── Header ──────────────────────────────────── */
+.header {
+    background: var(--neo-navy);
+    color: white;
+    text-align: center;
+    padding: 36px 24px 48px;
+    position: relative;
+    margin-bottom: -20px;
+    overflow: hidden;
+}
+
+.header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse 60% 80% at 50% 120%, rgba(6,182,212,0.18) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 60% at 20% -10%, rgba(37,99,235,0.2) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+.header-controls {
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    z-index: 10;
+}
+
+.language-switcher {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 7px 14px;
+    border-radius: 99px;
+    backdrop-filter: blur(12px);
+    transition: background 0.2s;
+}
+
+.language-switcher:hover { background: rgba(255,255,255,0.14); }
+
+.lang-current {
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.95);
+}
+
+.lang-separator {
+    color: rgba(255,255,255,0.3);
+    font-size: 13px;
+}
+
+.lang-link {
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.6);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+.lang-link:hover { color: var(--neo-cyan); }
+
+.header h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: #fff;
+    position: relative;
+}
+
+.header h1 img {
+    width: 44px;
+    height: 44px;
+    vertical-align: middle;
+    margin-right: 10px;
+    filter: drop-shadow(0 0 16px rgba(6,182,212,0.6));
+}
+
+.header > p {
+    font-size: 0.95rem;
+    color: rgba(255,255,255,0.6);
+    margin-top: 6px;
+    position: relative;
+}
+
+.intro-section {
+    display: none; /* 헤더 아래 소개 텍스트 - 탭 위에 위치해서 숨김 */
+}
+
+/* ── Ad container (top) ──────────────────────── */
+.ad-container {
+    margin: 24px 0 0;
+}
+.ad-container > div {
+    background: var(--bg-subtle);
+    border: 1.5px dashed var(--border);
+    padding: 16px;
+    border-radius: var(--radius);
+    color: var(--text-muted);
+    font-size: 13px;
+    text-align: center;
+}
+
+/* ── Navigation Tabs ─────────────────────────── */
+.nav-tabs {
+    display: flex;
+    gap: 2px;
+    background: var(--neo-navy);
+    padding: 0 24px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: relative;
+    z-index: 2;
+}
+.nav-tabs::-webkit-scrollbar { display: none; }
+
+.tab-btn {
+    flex-shrink: 0;
+    padding: 14px 18px;
+    border: none;
+    background: transparent;
+    color: rgba(255,255,255,0.5);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    font-family: inherit;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+    white-space: nowrap;
+}
+
+.tab-btn:hover {
+    color: rgba(255,255,255,0.85);
+}
+
+.tab-btn.active {
+    color: var(--neo-cyan);
+    border-bottom-color: var(--neo-cyan);
+    background: transparent;
+}
+
+/* 파일가져오기 특별 스타일 */
+.tab-btn[onclick*="file-import"] {
+    color: var(--neo-cyan) !important;
+    background: rgba(6,182,212,0.08) !important;
+    border-radius: 6px 6px 0 0;
+    font-weight: 600;
+}
+
+/* ── Global selectors ────────────────────────── */
+.global-selectors {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.selector-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 6px 12px;
+    border-radius: 99px;
+}
+
+.selector-group label { font-size: 14px; margin: 0; }
+
+.selector-group select {
+    border: none;
+    background: transparent;
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+    padding: 2px 4px;
+}
+
+.currency-selector {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 6px 12px;
+    border-radius: 99px;
+}
+
+.currency-selector label { font-size: 14px; margin: 0; }
+
+.currency-selector select {
+    border: none;
+    background: transparent;
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+}
+
+/* ── Sync indicator ──────────────────────────── */
+.sync-indicator {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--neo-navy);
+    color: var(--neo-cyan);
+    border: 1px solid rgba(6,182,212,0.3);
+    padding: 8px 14px;
+    border-radius: 99px;
+    font-size: 12px;
+    font-weight: 600;
+    z-index: 9999;
+    opacity: 0;
+    transform: translateY(-12px);
+    transition: all 0.3s ease;
+}
+
+.sync-indicator.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.sync-indicator .sync-icon {
+    display: inline-block;
+    animation: spin 1s linear infinite;
+    margin-right: 4px;
+}
+
+/* ── Responsive — layout ─────────────────────── */
+@media (max-width: 768px) {
+    .container { padding: 0 16px 40px; }
+
+    .header { padding: 28px 16px 40px; }
+    .header h1 { font-size: 1.6rem; }
+
+    .nav-tabs { padding: 0 12px; }
+    .tab-btn  { padding: 12px 12px; font-size: 12px; }
+
+    .header-controls { top: 14px; right: 16px; }
+}

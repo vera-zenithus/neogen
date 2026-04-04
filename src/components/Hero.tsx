@@ -85,7 +85,7 @@ const Hero: React.FC = () => {
             className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16"
           >
             <a
-              href="https://app.neogenworld.com"
+              href="https://neogenworld.com/app"
               className="btn-primary text-base px-8 py-4 group"
             >
               {t.cta1}

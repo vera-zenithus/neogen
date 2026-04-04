@@ -8,6 +8,13 @@ export default defineConfig({
   },
   server: {
     port: 3000,
+    proxy: {
+      '/api': {
+        target: 'https://app.neogenworld.com',
+        changeOrigin: true,
+        rewrite: (path) => path
+      }
+    }
   },
   build: {
     outDir: 'dist',

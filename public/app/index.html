@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="네오젠(NeoGen) - 스마트 AI 부기 어시스턴트. 기관·학회·기업·개인의 투명한 재무관리 솔루션. ESG 거버넌스 투명성 확보">
+    <meta name="keywords" content="네오젠, NeoGen, AI회계시스템, 복식부기, 무료회계, 학회회계, 재무관리, 분개장, 재무제표, 제니스어스">
+    <meta name="author" content="Zenithus Labs">
+    <meta property="og:title" content="네오젠 (NeoGen) - AI 회계시스템">
+    <meta property="og:description" content="AI 기반 복식부기 무료 회계 관리 솔루션">
+    <meta property="og:type" content="website">
+    <title>네오젠 (NeoGen) - AI 회계시스템</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles/base.css">
+    <link rel="stylesheet" href="styles/layout.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <link rel="stylesheet" href="styles/tabs.css">
+    <!-- Legacy backup (kept for safety) -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Google AdSense (베타 버전부터 활성화) -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_PUBLISHER_ID" crossorigin="anonymous"></script>
+
+    <!-- PDF 생성을 위한 jsPDF 라이브러리 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <!-- 엑셀 내보내기를 위한 SheetJS 라이브러리 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+    <!-- 이메일 전송을 위한 EmailJS 라이브러리 -->
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+
+    <!-- 다국어 지원 시스템 -->
+    <script src="i18n.js"></script>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="modules/firebase-config.js"></script>
+</head>
+<body>
+    <!-- ── 로그인 화면 (모달, 기본 숨김) ───────────────── -->
+    <div id="loginScreen" style="display:none; position:fixed; inset:0; z-index:9999;
+         background:var(--neo-navy); align-items:center; justify-content:center;
+         flex-direction:column; gap:0;">
+
+        <!-- 배경 글로우 -->
+        <div style="position:absolute; inset:0; pointer-events:none;
+             background: radial-gradient(ellipse 60% 60% at 50% 40%, rgba(6,182,212,0.12) 0%, transparent 70%);"></div>
+
+        <!-- 로그인 카드 -->
+        <div style="background:var(--neo-navy-mid); border:1px solid rgba(6,182,212,0.2);
+             border-radius:24px; padding:40px 36px; width:100%; max-width:400px;
+             box-shadow:0 24px 60px rgba(0,0,0,0.5); position:relative; z-index:1; text-align:center;">
+
+            <!-- 닫기 버튼 -->
+            <button onclick="closeLoginModal()"
+                    style="position:absolute; top:16px; right:16px; background:rgba(255,255,255,0.08);
+                           border:none; color:rgba(255,255,255,0.5); width:30px; height:30px;
+                           border-radius:50%; cursor:pointer; font-size:16px; line-height:1;
+                           display:flex; align-items:center; justify-content:center; transition:background 0.2s;"
+                    onmouseover="this.style.background='rgba(255,255,255,0.15)'"
+                    onmouseout="this.style.background='rgba(255,255,255,0.08)'">✕</button>
+
+            <!-- 네오 캐릭터 -->
+            <img src="neo-character1.png" alt="Neo"
+                 style="width:90px; height:90px; margin-bottom:8px;
+                        filter:drop-shadow(0 0 20px rgba(6,182,212,0.5));
+                        animation:neoFloat 4s ease-in-out infinite;">
+
+            <h1 style="color:white; font-size:1.6rem; font-weight:700; letter-spacing:-0.5px; margin-bottom:4px;">
+                NeoGen
+            </h1>
+            <p style="color:rgba(255,255,255,0.4); font-size:13px; margin-bottom:28px;">
+                AI Accounting Assistant by Zenithus Labs
+            </p>
+
+            <!-- Google 로그인 -->
+            <button id="googleLoginBtn" onclick="signInWithGoogle()"
+                    style="width:100%; padding:13px; border-radius:10px; border:1px solid rgba(255,255,255,0.12);
+                           background:rgba(255,255,255,0.06); color:white; font-size:14px; font-weight:600;
+                           cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px;
+                           transition:all 0.2s; margin-bottom:16px; font-family:inherit;"
+                    onmouseover="this.style.background='rgba(255,255,255,0.12)'"
+                    onmouseout="this.style.background='rgba(255,255,255,0.06)'">
+                <svg width="18" height="18" viewBox="0 0 48 48">
+                    <path fill="#FFC107" d="M43.6 20H24v8h11.3C33.6 33.2 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.7 1.1 7.8 2.9l5.7-5.7C33.8 6.5 29.2 4.5 24 4.5 12.7 4.5 3.5 13.7 3.5 25S12.7 45.5 24 45.5c11 0 20.5-8 20.5-20.5 0-1.4-.1-2.7-.4-4z"/>
+                    <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.5 15.1 18.9 12 24 12c3 0 5.7 1.1 7.8 2.9l5.7-5.7C33.8 6.5 29.2 4.5 24 4.5c-7.7 0-14.4 4.4-17.7 10.2z"/>
+                    <path fill="#4CAF50" d="M24 45.5c5.2 0 9.8-1.9 13.4-5l-6.2-5.2C29.3 37 26.8 38 24 38c-5.3 0-9.8-3.4-11.4-8.2L6 35.3C9.3 41.3 16.1 45.5 24 45.5z"/>
+                    <path fill="#1976D2" d="M43.6 20H24v8h11.3c-.8 2.3-2.3 4.3-4.3 5.8l6.2 5.2C40.9 35.6 44 30.7 44 25c0-1.7-.2-3.4-.4-5z"/>
+                </svg>
+                Google로 시작하기
+            </button>
+
+            <!-- 구분선 -->
+            <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+                <div style="flex:1; height:1px; background:rgba(255,255,255,0.1);"></div>
+                <span style="color:rgba(255,255,255,0.3); font-size:12px;">또는</span>
+                <div style="flex:1; height:1px; background:rgba(255,255,255,0.1);"></div>
+            </div>
+
+            <!-- 이메일 로그인 폼 -->
+            <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:12px;">
+                <input id="loginEmail" type="email" placeholder="이메일"
+                       style="padding:12px 14px; border-radius:10px; border:1px solid rgba(255,255,255,0.1);
+                              background:rgba(255,255,255,0.06); color:white; font-size:14px; font-family:inherit;
+                              outline:none; transition:border-color 0.2s;"
+                       onfocus="this.style.borderColor='rgba(6,182,212,0.5)'"
+                       onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
+                <input id="loginPassword" type="password" placeholder="비밀번호"
+                       style="padding:12px 14px; border-radius:10px; border:1px solid rgba(255,255,255,0.1);
+                              background:rgba(255,255,255,0.06); color:white; font-size:14px; font-family:inherit;
+                              outline:none; transition:border-color 0.2s;"
+                       onfocus="this.style.borderColor='rgba(6,182,212,0.5)'"
+                       onblur="this.style.borderColor='rgba(255,255,255,0.1)'"
+                       onkeydown="if(event.key==='Enter') signInWithEmail()">
+            </div>
+
+            <!-- 로그인/회원가입 버튼 -->
+            <div id="loginMode" style="display:flex; flex-direction:column; gap:8px; margin-bottom:12px;">
+                <button id="emailLoginBtn" onclick="signInWithEmail()"
+                        style="width:100%; padding:12px; border-radius:10px; border:none;
+                               background:var(--neo-cyan); color:var(--neo-navy); font-size:14px; font-weight:700;
+                               cursor:pointer; font-family:inherit; transition:opacity 0.2s;"
+                        onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+                    로그인
+                </button>
+                <button onclick="toggleAuthMode()"
+                        style="background:none; border:none; color:rgba(255,255,255,0.4); font-size:13px;
+                               cursor:pointer; font-family:inherit; padding:4px;">
+                    계정이 없으신가요? <span style="color:var(--neo-cyan);">회원가입</span>
+                </button>
+            </div>
+
+            <div id="signupMode" style="display:none; flex-direction:column; gap:8px; margin-bottom:12px;">
+                <button onclick="signUpWithEmail()"
+                        style="width:100%; padding:12px; border-radius:10px; border:none;
+                               background:var(--neo-cyan); color:var(--neo-navy); font-size:14px; font-weight:700;
+                               cursor:pointer; font-family:inherit; transition:opacity 0.2s;"
+                        onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+                    회원가입
+                </button>
+                <button onclick="toggleAuthMode()"
+                        style="background:none; border:none; color:rgba(255,255,255,0.4); font-size:13px;
+                               cursor:pointer; font-family:inherit; padding:4px;">
+                    이미 계정이 있으신가요? <span style="color:var(--neo-cyan);">로그인</span>
+                </button>
+            </div>
+
+            <!-- 비밀번호 찾기 -->
+            <button onclick="resetPassword()"
+                    style="background:none; border:none; color:rgba(255,255,255,0.25); font-size:12px;
+                           cursor:pointer; font-family:inherit; margin-bottom:16px;">
+                비밀번호를 잊으셨나요?
+            </button>
+
+            <!-- 에러 메시지 -->
+            <div id="loginError"
+                 style="display:none; background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3);
+                        color:#fca5a5; padding:10px 14px; border-radius:8px; font-size:13px; text-align:left;">
+            </div>
+
+            <!-- 하단 -->
+            <p style="margin-top:20px; color:rgba(255,255,255,0.2); font-size:11px; line-height:1.6;">
+                로그인 시 <a href="terms-of-service.html" target="_blank"
+                style="color:rgba(6,182,212,0.5); text-decoration:none;">이용약관</a>과
+                <a href="privacy-policy.html" target="_blank"
+                style="color:rgba(6,182,212,0.5); text-decoration:none;">개인정보처리방침</a>에 동의하는 것으로 간주합니다.
+            </p>
+        </div>
+    </div>
+
+    <!-- ── 업그레이드 모달 ─────────────────────────── -->
+    <div id="upgradeModal" style="display:none; position:fixed; inset:0; z-index:8000;
+         background:rgba(5,10,30,0.85); backdrop-filter:blur(12px);
+         align-items:center; justify-content:center; padding:20px;">
+        <div style="background:linear-gradient(145deg,#0f1f3d,#0a1628); border:1px solid rgba(6,182,212,0.2);
+             border-radius:28px; padding:36px 32px 28px; max-width:420px; width:100%;
+             text-align:center; position:relative; box-shadow:0 32px 80px rgba(0,0,0,0.5);">
+
+            <!-- 닫기 버튼 -->
+            <button onclick="closeUpgradeModal()"
+                    style="position:absolute; top:16px; right:16px; background:rgba(255,255,255,0.07);
+                           border:none; color:rgba(255,255,255,0.4); width:30px; height:30px;
+                           border-radius:50%; font-size:15px; cursor:pointer; line-height:1;
+                           transition:background 0.2s;"
+                    onmouseover="this.style.background='rgba(255,255,255,0.12)'"
+                    onmouseout="this.style.background='rgba(255,255,255,0.07)'">✕</button>
+
+            <!-- 네오 캐릭터 -->
+            <img src="neo-character1.png" alt="Neo"
+                 style="width:64px; margin-bottom:10px; filter:drop-shadow(0 0 20px rgba(6,182,212,0.6));">
+
+            <h2 style="color:white; font-size:1.25rem; font-weight:700; margin:0 0 6px;">
+                네오 Pro로 업그레이드
+            </h2>
+            <p style="color:rgba(255,255,255,0.45); font-size:13px; margin:0 0 24px; line-height:1.5;">
+                AI 회계 어시스턴트의 모든 기능을 사용하세요
+            </p>
+
+            <!-- 월간/연간 토글 -->
+            <div style="display:flex; background:rgba(255,255,255,0.05); border-radius:14px;
+                        padding:5px; margin-bottom:24px; gap:4px; border:1px solid rgba(255,255,255,0.08);">
+                <button id="toggleMonthly" onclick="setUpgradePeriod('monthly')"
+                        style="flex:1; padding:10px; border-radius:10px; border:none;
+                                background:var(--neo-cyan); color:var(--neo-navy); font-weight:700;
+                                font-size:13px; cursor:pointer; font-family:inherit; transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                                box-shadow:0 4px 12px rgba(6,182,212,0.2);">
+                    월간
+                </button>
+                <button id="toggleYearly" onclick="setUpgradePeriod('yearly')"
+                        style="flex:1; padding:10px; border-radius:10px; border:none;
+                                background:transparent; color:rgba(255,255,255,0.5); font-weight:600;
+                                font-size:13px; cursor:pointer; font-family:inherit; transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                                position:relative;">
+                    연간 <span style="display:block; color:#f59e0b; font-size:10px; font-weight:800; margin-top:1px;">Early Bird ⚡️</span>
+                </button>
+            </div>
+
+            <!-- 가격 카드 -->
+            <div style="background:rgba(6,182,212,0.05); border:1px solid rgba(6,182,212,0.2);
+                        border-radius:24px; padding:28px 24px 24px; margin-bottom:24px; position:relative;
+                        overflow:hidden;">
+                
+                <!-- 앰버 글로우 효과 (연간 선택 시 활성화될 예정인 시각적 기대감) -->
+                <div id="amberGlow" style="display:none; position:absolute; inset:0; background:radial-gradient(circle at top right, rgba(245,158,11,0.1), transparent 70%);"></div>
+
+                <!-- 얼리버드 런칭 배지 -->
+                <div id="upgradeSaving" style="display:none; background:linear-gradient(135deg, #f59e0b, #ea580c);
+                     color:white; font-size:10px; font-weight:800; border-radius:99px;
+                     padding:4px 14px; display:inline-block; margin-bottom:14px; text-transform:uppercase; 
+                     letter-spacing:0.5px; box-shadow:0 4px 12px rgba(245,158,11,0.3);">
+                    🚀 Launch Special Offer
+                </div>
+
+                <div style="margin-bottom:4px;">
+                    <span id="strikePrice" style="display:none; color:rgba(255,255,255,0.2); text-decoration:line-through; font-size:14px; margin-right:8px;">$168</span>
+                    <div style="color:white; font-size:2.8rem; font-weight:800; letter-spacing:-1.5px; line-height:1;">
+                        <span id="upgradePrice">$14</span><span id="upgradePeriodLabel"
+                        style="font-size:16px; font-weight:500; color:rgba(255,255,255,0.4); margin-left:4px;">/월</span>
+                    </div>
+                </div>
+
+                <div id="savingText" style="display:none; color:#f59e0b; font-size:12px; font-weight:600; margin-top:8px;">
+                     정상가 대비 $69 절약 효과 ✨
+                </div>
+
+                <div style="color:rgba(255,255,255,0.3); font-size:11px; margin-top:20px; border-top:1px solid rgba(255,255,255,0.05); padding-top:16px;">
+                    Visa · Mastercard · Apple Pay · Google Pay
+                </div>
+
+                <!-- 기능 목록 -->
+                <div style="text-align:left; display:grid; gap:8px;">
+                    <div style="display:flex; align-items:center; gap:9px; font-size:13px; color:rgba(255,255,255,0.8);">
+                        <span style="color:#06b6d4; font-size:15px; flex-shrink:0;">✦</span>
+                        네오 AI 무제한 (Claude Sonnet)
+                    </div>
+                    <div style="display:flex; align-items:center; gap:9px; font-size:13px; color:rgba(255,255,255,0.8);">
+                        <span style="color:#06b6d4; font-size:15px; flex-shrink:0;">✦</span>
+                        거래 입력 무제한 (Free: 월 100건)
+                    </div>
+                    <div style="display:flex; align-items:center; gap:9px; font-size:13px; color:rgba(255,255,255,0.8);">
+                        <span style="color:#06b6d4; font-size:15px; flex-shrink:0;">✦</span>
+                        Excel · CSV 가져오기/내보내기
+                    </div>
+                    <div style="display:flex; align-items:center; gap:9px; font-size:13px; color:rgba(255,255,255,0.8);">
+                        <span style="color:#06b6d4; font-size:15px; flex-shrink:0;">✦</span>
+                        PDF 재무제표 리포트
+                    </div>
+                    <div style="display:flex; align-items:center; gap:9px; font-size:13px; color:rgba(255,255,255,0.8);">
+                        <span style="color:#06b6d4; font-size:15px; flex-shrink:0;">✦</span>
+                        클라우드 저장 · 기기 간 동기화
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA 버튼 -->
+            <button onclick="startCheckout(window._upgradePlan || 'pro_monthly')" id="checkoutProBtn"
+                    style="width:100%; padding:14px; border-radius:12px; border:none;
+                           background:linear-gradient(135deg, #06b6d4, #2563eb); color:white;
+                           font-weight:700; font-size:15px; cursor:pointer; font-family:inherit;
+                           box-shadow:0 4px 20px rgba(6,182,212,0.35); transition:opacity 0.2s;
+                           margin-bottom:12px; letter-spacing:-0.2px;"
+                    onmouseover="this.style.opacity='0.88'"
+                    onmouseout="this.style.opacity='1'">
+                ⚡ Pro 시작하기
+            </button>
+
+            <!-- 보증 문구 -->
+            <div style="margin-top:20px; padding-top:16px; border-top:1px solid rgba(255,255,255,0.05);">
+                <p style="color:rgba(255,255,255,0.3); font-size:11px; margin:0 0 4px; line-height:1.5; font-weight:500;">
+                    🛡️ 14일 이내 전액 환불 보장
+                </p>
+                <p style="color:rgba(255,255,255,0.2); font-size:10px; margin:0; font-weight:400;">
+                    언제든지 취소 가능 · 안전한 암호화 결제
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── 앱 본체 ─────────────────────────────────── -->
+    <div id="appContainer">
+
+    <!-- 저장 유도 배너 (비로그인 상태) -->
+    <div id="saveNudgeBanner"
+         style="display:flex; align-items:center; justify-content:center; gap:12px;
+                background:rgba(6,182,212,0.1); border-bottom:1px solid rgba(6,182,212,0.2);
+                padding:10px 20px; font-size:13px; color:rgba(255,255,255,0.8);
+                position:sticky; top:0; z-index:100; backdrop-filter:blur(8px);">
+        <span>💾 지금 입력한 데이터는 이 기기에만 저장돼요.</span>
+        <button onclick="openLoginModal()"
+                style="background:var(--neo-cyan); border:none; border-radius:99px;
+                       padding:5px 14px; color:var(--neo-navy); font-size:12px; font-weight:700;
+                       cursor:pointer; font-family:inherit; white-space:nowrap;">
+            로그인하고 클라우드에 저장
+        </button>
+        <button onclick="document.getElementById('saveNudgeBanner').style.display='none'"
+                style="background:none; border:none; color:rgba(255,255,255,0.3);
+                       cursor:pointer; font-size:16px; padding:0 4px;">✕</button>
+    </div>
+
+    <div class="container">
+        <header class="header">
+            <div class="header-controls" style="display:flex; gap:12px; align-items:center;">
+                <div class="language-switcher">
+                    <span class="lang-current">🇰🇷 한국어</span>
+                    <span class="lang-separator">/</span>
+                    <a href="en/index.html" class="lang-link">🇺🇸 English</a>
+                </div>
+                <!-- 비로그인 시: 로그인 버튼 -->
+                <button id="headerLoginBtn" onclick="openLoginModal()"
+                        style="display:flex; align-items:center; gap:8px; padding:7px 16px;
+                               background:var(--neo-cyan); border:none; border-radius:99px;
+                               color:var(--neo-navy); font-size:13px; font-weight:700;
+                               cursor:pointer; font-family:inherit; transition:opacity 0.2s;"
+                        onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+                    로그인
+                </button>
+
+                <!-- 로그인 후: 유저 정보 -->
+                <div id="userInfoBar" style="display:none; align-items:center; gap:10px;
+                     background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.12);
+                     padding:6px 14px; border-radius:99px;">
+                    <img id="userPhoto" src="neo-character.png" alt="user"
+                         style="width:24px; height:24px; border-radius:50%; object-fit:cover;">
+                    <span id="userName" style="font-size:13px; color:white; font-weight:500; max-width:120px;
+                          overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">로딩 중...</span>
+                    <span id="userTier" onclick="showUpgradeModal()" style="font-size:11px; font-weight:700;
+                          color:var(--neo-cyan); cursor:pointer; text-decoration:underline;"></span>
+                    <button onclick="signOut()"
+                            style="background:none; border:none; color:rgba(255,255,255,0.4); font-size:12px;
+                                   cursor:pointer; font-family:inherit; padding:0; transition:color 0.2s;"
+                            onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">
+                        로그아웃
+                    </button>
+                </div>
+            </div>
+
+            <h1 style="font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em; display: flex; align-items: center; gap: 4px;">
+                <a href="https://neogenworld.com" style="color: #06b6d4; text-decoration: none; opacity: 1; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.75'" onmouseout="this.style.opacity='1'">Neo</a>
+                <span style="width: 1px; height: 1.1em; background: rgba(6,182,212,0.6); display: inline-block; margin: 0 6px;"></span>
+                <a href="/app" style="color: #f1f5f9; text-decoration: none; opacity: 1; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.75'" onmouseout="this.style.opacity='1'">Gen</a>
+            </h1>
+            <p>스마트 AI 부기 어시스턴트</p>
+            <div class="intro-section" style="margin: 20px 0; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 10px; backdrop-filter: blur(10px);">
+                <p data-i18n="intro.description" style="font-size: 1.1em; margin-bottom: 10px; color: rgba(255,255,255,0.9);">기관·학회·기업·개인의 투명한 재무관리 솔루션</p>
+                <p data-i18n="intro.features" style="font-size: 0.95em; color: rgba(255,255,255,0.8);">🎯 AI 자동분류 | 📈 실시간 투명성 | 🌐 ESG 리포팅 | 🔒 데이터 보안</p>
+            </div>
+        </header>
+
+        <!-- AdSense 상단 배너 (승인 후 활성화) -->
+        <div class="ad-container" style="text-align: center; margin: 20px 0; padding: 10px;">
+            <!--
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-YOUR_PUBLISHER_ID"
+                 data-ad-slot="YOUR_AD_SLOT_ID"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+            -->
+            <div style="background: #f8f9fa; border: 2px dashed #dee2e6; padding: 20px; border-radius: 8px; color: #6c757d;">
+                📊 <strong>광고 영역</strong> (AdSense 승인 대기 중)
+            </div>
+        </div>
+
+        <nav class="nav-tabs">
+            <button class="tab-btn active" onclick="showTab('smart-input', this)" data-i18n="nav.smart_input">🤖 스마트입력</button>
+            <button class="tab-btn" onclick="showTab('file-import', this)" style="background: var(--accent-gradient); color: white; font-weight: 600;">📂 파일가져오기</button>
+            <button class="tab-btn" onclick="showTab('dashboard', this)" data-i18n="nav.dashboard">대시보드</button>
+            <button class="tab-btn" onclick="showTab('accounts', this)" data-i18n="nav.accounts">계정과목</button>
+            <button class="tab-btn" onclick="showTab('journal', this)" data-i18n="nav.journal">분개장</button>
+            <button class="tab-btn" onclick="showTab('ledger', this)" data-i18n="nav.ledger">원장</button>
+            <button class="tab-btn" onclick="showTab('reports', this)" data-i18n="nav.reports">재무제표</button>
+            <button class="tab-btn" onclick="showTab('annual-report', this)" data-i18n="nav.annual_report">🌐 연말공시</button>
+            <button class="tab-btn" onclick="showComingSoon('tutorial')">📚 회계배우기 <span style="font-size: 10px; background: #ff6b6b; color: white; padding: 2px 6px; border-radius: 10px; margin-left: 5px;">SOON</span></button>
+            <button class="tab-btn" onclick="showTab('faq', this)">💬 FAQ & 지원</button>
+        </nav>
+
+        <!-- Tab placeholder divs (content loaded dynamically via fetch) -->
+        <div id="smart-input"   class="tab-content active"></div>
+        <div id="file-import"   class="tab-content"></div>
+        <div id="dashboard"     class="tab-content"></div>
+        <div id="accounts"      class="tab-content"></div>
+        <div id="journal"       class="tab-content"></div>
+        <div id="ledger"        class="tab-content"></div>
+        <div id="reports"       class="tab-content"></div>
+        <div id="annual-report" class="tab-content"></div>
+        <div id="tutorial"      class="tab-content"></div>
+        <div id="faq"           class="tab-content"></div>
+
+    </div><!-- /container -->
+
+    </div><!-- /appContainer -->
+
+    <!-- ── 네오 도우미 ─────────────────────────────── -->
+    <div id="neoHelper" class="neo-character" onclick="toggleNeoBubble()">
+        <img src="neo-character.png?v=2" alt="Neo Helper" style="width: 100%; height: 100%;">
+    </div>
+
+    <!-- 네오 말풍선 -->
+    <div id="neoBubble" class="neo-bubble">
+        안녕하세요! 네오입니다 ✨<br>
+        궁금한 게 있으시면 언제든 말씀해주세요!
+    </div>
+
+    <!-- ── 계정 추가 모달 ──────────────────────────── -->
+    <div id="accountModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 data-i18n="accounts.add_account">계정과목 추가</h3>
+                <span class="close" onclick="closeAccountModal()">&times;</span>
+            </div>
+            <form id="accountForm" onsubmit="addAccount(event)">
+                <div class="form-group">
+                    <label for="accountCode" data-i18n="accounts.account_code">계정코드</label>
+                    <input type="text" id="accountCode" required data-i18n-placeholder="accounts.placeholder_code" placeholder="예: 101">
+                </div>
+                <div class="form-group">
+                    <label for="accountName" data-i18n="accounts.account_name">계정명</label>
+                    <input type="text" id="accountName" required data-i18n-placeholder="accounts.placeholder_name" placeholder="예: 현금">
+                </div>
+                <div class="form-group">
+                    <label for="accountType" data-i18n="accounts.account_type">계정유형</label>
+                    <select id="accountType" required>
+                        <option value="" data-i18n="accounts.select_type">선택하세요</option>
+                        <option value="asset" data-i18n="account_type.asset">자산</option>
+                        <option value="liability" data-i18n="account_type.liability">부채</option>
+                        <option value="equity" data-i18n="account_type.equity">자본</option>
+                        <option value="revenue" data-i18n="account_type.revenue">수익</option>
+                        <option value="expense" data-i18n="account_type.expense">비용</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeAccountModal()" data-i18n="common.cancel">취소</button>
+                    <button type="submit" class="btn btn-primary" data-i18n="button.add">추가</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ── 분개 입력 모달 ──────────────────────────── -->
+    <div id="journalModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>분개 작성</h3>
+                <span class="close" onclick="closeJournalModal()">&times;</span>
+            </div>
+            <form id="journalForm" onsubmit="addJournalEntry(event)">
+                <div class="form-group">
+                    <label for="journalDate">날짜</label>
+                    <input type="date" id="journalDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="journalDescription">적요</label>
+                    <input type="text" id="journalDescription" required>
+                </div>
+
+                <div class="journal-entries-form">
+                    <h4>분개 내역</h4>
+                    <div id="journalEntries">
+                        <div class="journal-entry-row">
+                            <select class="debit-account" required>
+                                <option value="">차변 계정 선택</option>
+                            </select>
+                            <input type="number" class="debit-amount" placeholder="차변 금액" min="0" step="1">
+                            <select class="credit-account" required>
+                                <option value="">대변 계정 선택</option>
+                            </select>
+                            <input type="number" class="credit-amount" placeholder="대변 금액" min="0" step="1">
+                            <button type="button" class="btn btn-small" onclick="removeJournalEntry(this)">삭제</button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-secondary" onclick="addJournalEntryRow()">+ 분개 추가</button>
+                </div>
+
+                <div class="balance-check">
+                    <span>차변 합계: <span id="debitTotal">₩ 0</span></span>
+                    <span>대변 합계: <span id="creditTotal">₩ 0</span></span>
+                    <span id="balanceStatus"></span>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeJournalModal()">취소</button>
+                    <button type="submit" class="btn btn-primary">저장</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ── 분개 수정 모달 ──────────────────────────── -->
+    <div id="editJournalModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🔧 분개 수정</h3>
+                <span class="close" onclick="closeEditJournalModal()">&times;</span>
+            </div>
+            <form id="editJournalForm" onsubmit="saveJournalEdit(event)">
+                <div class="form-group">
+                    <label for="editJournalDate">날짜</label>
+                    <input type="date" id="editJournalDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="editJournalDescription">적요</label>
+                    <input type="text" id="editJournalDescription" required>
+                </div>
+
+                <div class="journal-entries-form">
+                    <h4>분개 내역 수정</h4>
+                    <div id="editJournalEntries">
+                        <!-- 동적으로 생성됨 -->
+                    </div>
+                </div>
+
+                <div class="balance-check">
+                    <span>차변 합계: <span id="editDebitTotal">₩ 0</span></span>
+                    <span>대변 합계: <span id="editCreditTotal">₩ 0</span></span>
+                    <span id="editBalanceStatus"></span>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeEditJournalModal()">취소</button>
+                    <button type="submit" class="btn btn-primary">💾 수정 저장</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 카피라이트 -->
+    <footer style="background: var(--neo-navy-mid); border-top: 1px solid rgba(6,182,212,0.15); color: var(--text-secondary); text-align: center; padding: 28px 24px; margin-top: 0;">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <p style="margin-bottom: 6px; font-size: 0.95em; font-weight: 700; color: var(--text-primary);">
+                NeoGen — AI Bookkeeping Assistant
+            </p>
+            <p style="margin-bottom: 16px; font-size: 0.85em; color: var(--text-secondary);">
+                Smart double-entry accounting for everyone
+            </p>
+            <div style="border-top: 1px solid rgba(255,255,255,0.06); padding-top: 16px; margin-top: 4px;">
+                <p style="margin-bottom: 6px; font-size: 0.85em;">
+                    <strong style="color: var(--neo-cyan);">ZenithUs Labs</strong> &nbsp;·&nbsp; "At the Zenith, Together"
+                </p>
+                <p style="font-size: 0.82em; margin-bottom: 6px;">
+                    © 2026 ZenithUs Labs. All rights reserved.
+                </p>
+                <p style="font-size: 0.82em; margin-bottom: 6px;">
+                    <a href="mailto:support@neogenworld.com" style="color: var(--neo-cyan); text-decoration: none;">support@neogenworld.com</a>
+                </p>
+                <p style="font-size: 0.82em;">
+                    <a href="privacy-policy.html" target="_blank" style="color: var(--text-muted); text-decoration: none;">Privacy Policy</a> &nbsp;·&nbsp;
+                    <a href="terms-of-service.html" target="_blank" style="color: var(--text-muted); text-decoration: none;">Terms of Service</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- NeoGen Modules (order matters) -->
+    <script src="modules/data.js"></script>
+    <script src="modules/utils.js"></script>
+    <script src="modules/neo.js"></script>
+    <script src="modules/accounts.js"></script>
+    <script src="modules/ledger.js"></script>
+    <script src="modules/journal.js"></script>
+    <script src="modules/reports.js"></script>
+    <script src="modules/smartInput.js"></script>
+    <script src="modules/annual.js"></script>
+    <script src="modules/ai.js"></script>
+    <script src="main.js"></script>
+    <script src="modules/auth.js"></script>
+    <script src="modules/payment.js"></script>
+
+    <!-- Tab loader -->
+    <script>
+    (function() {
+        // Track which tabs have been loaded
+        var _loadedTabs = {};
+
+        /**
+         * Load a tab's HTML content from tabs/{tabName}.html if not already loaded.
+         * Returns a Promise that resolves when content is ready.
+         */
+        window.loadTab = function(tabName) {
+            if (_loadedTabs[tabName]) {
+                return Promise.resolve();
+            }
+            var el = document.getElementById(tabName);
+            if (!el) return Promise.resolve();
+
+            return fetch('tabs/' + tabName + '.html')
+                .then(function(res) {
+                    if (!res.ok) throw new Error('Tab not found: ' + tabName);
+                    return res.text();
+                })
+                .then(function(html) {
+                    el.innerHTML = html;
+                    _loadedTabs[tabName] = true;
+                })
+                .catch(function(err) {
+                    console.warn('[loadTab] ' + err.message);
+                    _loadedTabs[tabName] = true; // prevent retry loops
+                });
+        };
+
+        // Patch showTab to load content before switching.
+        // main.js registers its DOMContentLoaded listener first and handles
+        // pre-loading core tabs + calling init(). We just need to patch showTab
+        // so that on-demand tab switches also trigger a load.
+        document.addEventListener('DOMContentLoaded', function() {
+            var _originalShowTab = window.showTab;
+            window.showTab = function(tabName, triggerElement) {
+                loadTab(tabName).then(function() {
+                    if (_originalShowTab) {
+                        _originalShowTab(tabName, triggerElement);
+                    }
+                });
+            };
+        });
+    })();
+    </script>
+</body>
+</html>

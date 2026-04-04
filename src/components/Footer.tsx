@@ -82,8 +82,8 @@ const Footer: React.FC = () => {
             <h4 className="text-sm font-semibold text-white mb-4">{t.links.legal}</h4>
             <ul className="space-y-3">
               {[
-                { label: t.links.privacy, href: '#' },
-                { label: t.links.terms, href: '#' },
+                { label: t.links.privacy, href: '/app/privacy-policy.html' },
+                { label: t.links.terms, href: '/app/terms-of-service.html' },
               ].map((item) => (
                 <li key={item.label}>
                   <a

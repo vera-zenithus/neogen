@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>문의 게시판 — NeoGen</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --neo-navy:     #0f172a;
+            --neo-navy-mid: #1e293b;
+            --neo-cyan:     #06b6d4;
+            --neo-blue:     #2563eb;
+            --bg-page:      #f0f4f8;
+            --bg-card:      #ffffff;
+            --bg-subtle:    #f8fafc;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted:   #94a3b8;
+            --border:       #e2e8f0;
+            --green:        #10b981;
+            --red:          #ef4444;
+            --shadow-sm:    0 1px 3px rgba(15,23,42,0.08);
+            --shadow-md:    0 4px 12px rgba(15,23,42,0.1);
+            --radius:       10px;
+            --radius-lg:    16px;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg-page);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        /* ── Header ── */
+        .site-header {
+            background: var(--neo-navy);
+            padding: 0 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 60px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .site-header a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .site-header a img {
+            width: 28px;
+            height: 28px;
+            filter: drop-shadow(0 0 8px rgba(6,182,212,0.5));
+        }
+
+        .back-btn {
+            color: rgba(255,255,255,0.5) !important;
+            font-size: 13px !important;
+            font-weight: 500 !important;
+        }
+
+        .back-btn:hover { color: white !important; }
+
+        /* ── Container ── */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px 80px;
+        }
+
+        /* ── Page Title ── */
+        .page-title {
+            margin-bottom: 28px;
+        }
+
+        .page-title h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .page-title p {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        /* ── Toolbar ── */
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            gap: 12px;
+        }
+
+        .toolbar-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        /* ── Buttons ── */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 9px 18px;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: inherit;
+            transition: all 0.15s;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: var(--neo-blue);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+        }
+
+        .btn-secondary {
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-subtle);
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+            border-radius: 6px;
+        }
+
+        /* ── Board List ── */
+        .board {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .board-head {
+            display: grid;
+            grid-template-columns: 60px 1fr 90px 100px 80px;
+            padding: 12px 20px;
+            background: var(--bg-subtle);
+            border-bottom: 1px solid var(--border);
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .board-row {
+            display: grid;
+            grid-template-columns: 60px 1fr 90px 100px 80px;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            align-items: center;
+            cursor: pointer;
+            transition: background 0.15s;
+            font-size: 13px;
+        }
+
+        .board-row:last-child { border-bottom: none; }
+
+        .board-row:hover { background: var(--bg-subtle); }
+
+        .board-num {
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+
+        .board-title {
+            font-weight: 500;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            overflow: hidden;
+        }
+
+        .board-title span {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .lock-icon {
+            font-size: 12px;
+            flex-shrink: 0;
+            color: var(--text-muted);
+        }
+
+        .board-author {
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+
+        .board-date {
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 3px 10px;
+            border-radius: 99px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: rgba(245,158,11,0.1);
+            color: #92400e;
+        }
+
+        .status-answered {
+            background: rgba(16,185,129,0.1);
+            color: #065f46;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        .empty-state p:first-child {
+            font-size: 2rem;
+            margin-bottom: 12px;
+        }
+
+        /* ── Modal ── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15,23,42,0.6);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.open { display: flex; }
+
+        .modal {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 580px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(15,23,42,0.2);
+            border: 1px solid var(--border);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            background: var(--bg-card);
+            z-index: 1;
+        }
+
+        .modal-header h3 {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .modal-close {
+            width: 28px;
+            height: 28px;
+            border: none;
+            background: var(--bg-subtle);
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s;
+        }
+
+        .modal-close:hover {
+            background: var(--border);
+            color: var(--text-primary);
+        }
+
+        .modal-body { padding: 24px; }
+
+        /* ── Form ── */
+        .form-group { margin-bottom: 18px; }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            margin-bottom: 6px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px 13px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 14px;
+            font-family: inherit;
+            color: var(--text-primary);
+            background: var(--bg-card);
+            transition: border-color 0.15s, box-shadow 0.15s;
+            outline: none;
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: var(--neo-blue);
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+        }
+
+        .form-group textarea { min-height: 140px; }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .private-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 14px;
+            background: var(--bg-subtle);
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: border-color 0.15s;
+        }
+
+        .private-toggle:hover { border-color: var(--neo-blue); }
+
+        .private-toggle input[type="checkbox"] {
+            width: auto;
+            cursor: pointer;
+            accent-color: var(--neo-blue);
+        }
+
+        .private-toggle-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        #passwordField { display: none; }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        /* ── View Modal ── */
+        .view-meta {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .view-meta strong {
+            color: var(--text-secondary);
+        }
+
+        .view-content {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            min-height: 100px;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .answer-section {
+            margin-top: 24px;
+            padding: 20px;
+            background: rgba(6,182,212,0.05);
+            border: 1px solid rgba(6,182,212,0.2);
+            border-radius: var(--radius);
+        }
+
+        .answer-section h4 {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--neo-cyan);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .answer-content {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            white-space: pre-wrap;
+        }
+
+        /* ── Password Prompt ── */
+        .pw-prompt {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .pw-prompt p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .pw-input-row {
+            display: flex;
+            gap: 8px;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        .pw-input-row input {
+            flex: 1;
+            padding: 10px 13px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+        }
+
+        .pw-input-row input:focus {
+            border-color: var(--neo-blue);
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+        }
+
+        /* ── Error ── */
+        .error-msg {
+            background: rgba(239,68,68,0.07);
+            border: 1px solid rgba(239,68,68,0.2);
+            color: #991b1b;
+            padding: 10px 14px;
+            border-radius: var(--radius);
+            font-size: 13px;
+            margin-top: 12px;
+            display: none;
+        }
+
+        .success-msg {
+            background: rgba(16,185,129,0.07);
+            border: 1px solid rgba(16,185,129,0.2);
+            color: #065f46;
+            padding: 10px 14px;
+            border-radius: var(--radius);
+            font-size: 13px;
+            margin-top: 12px;
+            display: none;
+        }
+
+        /* ── Pagination ── */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 20px;
+        }
+
+        .page-btn {
+            width: 32px;
+            height: 32px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-family: inherit;
+            transition: all 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .page-btn:hover { background: var(--bg-subtle); }
+        .page-btn.active {
+            background: var(--neo-blue);
+            color: white;
+            border-color: var(--neo-blue);
+        }
+
+        /* ── Notice ── */
+        .notice-box {
+            background: rgba(6,182,212,0.06);
+            border: 1px solid rgba(6,182,212,0.2);
+            border-radius: var(--radius);
+            padding: 14px 18px;
+            font-size: 13px;
+            color: #0e7490;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        @media (max-width: 600px) {
+            .board-head,
+            .board-row {
+                grid-template-columns: 1fr auto;
+            }
+            .board-num,
+            .board-author,
+            .board-date { display: none; }
+            .form-row { grid-template-columns: 1fr; }
+            .site-header { padding: 0 16px; }
+            .container { padding: 24px 16px 60px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="site-header">
+        <a href="index.html">
+            <img src="neo-character.png" alt="Neo">
+            NeoGen
+        </a>
+        <a href="index.html" class="back-btn">← 앱으로 돌아가기</a>
+    </header>
+
+    <!-- Main -->
+    <main class="container">
+
+        <div class="page-title">
+            <h1>💬 문의 게시판</h1>
+            <p>궁금한 점이나 불편한 점을 남겨주세요. 빠르게 답변드릴게요.</p>
+        </div>
+
+        <div class="notice-box">
+            🔒 비밀글로 작성하면 비밀번호를 아는 분만 내용을 볼 수 있어요. 관리자는 모든 글을 확인합니다.
+        </div>
+
+        <div class="toolbar">
+            <div class="toolbar-left">
+                <span id="totalCount">전체 0건</span>
+            </div>
+            <button class="btn btn-primary" onclick="openWriteModal()">
+                ✏️ 문의 작성
+            </button>
+        </div>
+
+        <!-- Board -->
+        <div class="board">
+            <div class="board-head">
+                <div>번호</div>
+                <div>제목</div>
+                <div>작성자</div>
+                <div>날짜</div>
+                <div>상태</div>
+            </div>
+            <div id="boardList">
+                <div class="empty-state">
+                    <p>💬</p>
+                    <p>아직 문의가 없어요.</p>
+                    <p style="margin-top:6px;">첫 번째 문의를 남겨보세요!</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="pagination" id="pagination"></div>
+
+    </main>
+
+    <!-- ── 작성 모달 ── -->
+    <div class="modal-overlay" id="writeModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>✏️ 문의 작성</h3>
+                <button class="modal-close" onclick="closeWriteModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>이름 *</label>
+                        <input type="text" id="writeName" placeholder="홍길동" maxlength="20">
+                    </div>
+                    <div class="form-group">
+                        <label>이메일 (선택)</label>
+                        <input type="email" id="writeEmail" placeholder="답변 받을 이메일">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>제목 *</label>
+                    <input type="text" id="writeTitle" placeholder="문의 제목을 입력해주세요" maxlength="60">
+                </div>
+
+                <div class="form-group">
+                    <label>내용 *</label>
+                    <textarea id="writeContent" placeholder="문의 내용을 자세히 작성해주세요."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>카테고리</label>
+                    <select id="writeCategory">
+                        <option value="general">일반 문의</option>
+                        <option value="bug">오류/버그 신고</option>
+                        <option value="feature">기능 개선 요청</option>
+                        <option value="billing">결제/구독</option>
+                        <option value="account">계정 관련</option>
+                        <option value="other">기타</option>
+                    </select>
+                </div>
+
+                <!-- 비밀글 토글 -->
+                <div class="form-group">
+                    <label class="private-toggle" onclick="togglePrivate()">
+                        <input type="checkbox" id="isPrivate" style="width:auto;">
+                        <span class="private-toggle-label">🔒 비밀글로 작성 (비밀번호로 보호)</span>
+                    </label>
+                </div>
+
+                <div id="passwordField" class="form-group">
+                    <label>비밀번호 *</label>
+                    <input type="password" id="writePassword"
+                           placeholder="4자리 이상 숫자 또는 문자"
+                           maxlength="20">
+                    <div style="font-size:12px; color:var(--text-muted); margin-top:6px;">
+                        이 비밀번호를 입력해야 내용을 볼 수 있어요. 관리자는 항상 확인 가능합니다.
+                    </div>
+                </div>
+
+                <div id="writeError" class="error-msg"></div>
+                <div id="writeSuccess" class="success-msg"></div>
+
+                <div class="form-actions">
+                    <button class="btn btn-secondary" onclick="closeWriteModal()">취소</button>
+                    <button class="btn btn-primary" onclick="submitInquiry()">제출하기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── 보기 모달 ── -->
+    <div class="modal-overlay" id="viewModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="viewTitle">문의 내용</h3>
+                <button class="modal-close" onclick="closeViewModal()">✕</button>
+            </div>
+            <div class="modal-body">
+
+                <!-- 비밀번호 입력 화면 -->
+                <div id="pwPrompt" class="pw-prompt" style="display:none;">
+                    <p>🔒 비밀글입니다.<br>비밀번호를 입력해주세요.</p>
+                    <div class="pw-input-row">
+                        <input type="password" id="viewPassword"
+                               placeholder="비밀번호"
+                               onkeydown="if(event.key==='Enter') checkPassword()">
+                        <button class="btn btn-primary btn-sm" onclick="checkPassword()">확인</button>
+                    </div>
+                    <div id="pwError" class="error-msg" style="max-width:300px; margin:12px auto 0;"></div>
+                </div>
+
+                <!-- 내용 화면 -->
+                <div id="viewContent" style="display:none;">
+                    <div class="view-meta">
+                        <span><strong>작성자</strong> <span id="metaName"></span></span>
+                        <span><strong>카테고리</strong> <span id="metaCategory"></span></span>
+                        <span><strong>날짜</strong> <span id="metaDate"></span></span>
+                        <span><strong>상태</strong> <span id="metaStatus"></span></span>
+                    </div>
+                    <div class="view-content" id="mainContent"></div>
+
+                    <!-- 답변 -->
+                    <div class="answer-section" id="answerSection" style="display:none;">
+                        <h4>🤖 네오의 답변</h4>
+                        <div class="answer-content" id="answerContent"></div>
+                        <div style="font-size:12px; color:var(--text-muted); margin-top:10px;" id="answerDate"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="modules/firebase-config.js"></script>
+
+    <script>
+    // ── 상태 ──────────────────────────────────────────
+    let inquiries = [];
+    let currentPage = 1;
+    const PAGE_SIZE = 10;
+    let currentDocId = null;
+
+    const CATEGORY_LABELS = {
+        general: '일반 문의',
+        bug:     '오류/버그',
+        feature: '기능 개선',
+        billing: '결제/구독',
+        account: '계정 관련',
+        other:   '기타'
+    };
+
+    // ── 초기화 ──────────────────────────────────────────
+    document.addEventListener('DOMContentLoaded', () => {
+        loadInquiries();
+    });
+
+    // ── Firestore 로드 ──────────────────────────────────
+    async function loadInquiries() {
+        try {
+            const snapshot = await db.collection('inquiries')
+                .orderBy('createdAt', 'desc')
+                .get();
+
+            inquiries = snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+
+            renderBoard();
+        } catch (e) {
+            console.error('로드 오류:', e);
+            // Firebase 미설정 시 로컬 데모 데이터
+            inquiries = [];
+            renderBoard();
+        }
+    }
+
+    // ── 게시판 렌더링 ────────────────────────────────────
+    function renderBoard() {
+        const list = document.getElementById('boardList');
+        const total = inquiries.length;
+        document.getElementById('totalCount').textContent = `전체 ${total}건`;
+
+        if (total === 0) {
+            list.innerHTML = `
+                <div class="empty-state">
+                    <p>💬</p>
+                    <p>아직 문의가 없어요.</p>
+                    <p style="margin-top:6px;">첫 번째 문의를 남겨보세요!</p>
+                </div>`;
+            document.getElementById('pagination').innerHTML = '';
+            return;
+        }
+
+        const start = (currentPage - 1) * PAGE_SIZE;
+        const pageItems = inquiries.slice(start, start + PAGE_SIZE);
+        const totalPages = Math.ceil(total / PAGE_SIZE);
+
+        list.innerHTML = pageItems.map((item, idx) => {
+            const num = total - start - idx;
+            const date = item.createdAt?.toDate
+                ? formatDate(item.createdAt.toDate())
+                : (item.createdAt || '');
+            const isPrivate = item.isPrivate;
+            const statusClass = item.status === 'answered' ? 'status-answered' : 'status-pending';
+            const statusLabel = item.status === 'answered' ? '답변완료' : '답변대기';
+
+            return `
+                <div class="board-row" onclick="openViewModal('${item.id}')">
+                    <div class="board-num">${num}</div>
+                    <div class="board-title">
+                        ${isPrivate ? '<span class="lock-icon">🔒</span>' : ''}
+                        <span>${isPrivate ? '비밀글입니다.' : escapeHtml(item.title)}</span>
+                    </div>
+                    <div class="board-author">${escapeHtml(item.name)}</div>
+                    <div class="board-date">${date}</div>
+                    <div><span class="status-badge ${statusClass}">${statusLabel}</span></div>
+                </div>`;
+        }).join('');
+
+        // 페이지네이션
+        const pg = document.getElementById('pagination');
+        if (totalPages <= 1) { pg.innerHTML = ''; return; }
+
+        let pgHtml = '';
+        for (let i = 1; i <= totalPages; i++) {
+            pgHtml += `<button class="page-btn ${i === currentPage ? 'active' : ''}"
+                onclick="goPage(${i})">${i}</button>`;
+        }
+        pg.innerHTML = pgHtml;
+    }
+
+    function goPage(n) {
+        currentPage = n;
+        renderBoard();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ── 작성 모달 ────────────────────────────────────────
+    function openWriteModal() {
+        document.getElementById('writeModal').classList.add('open');
+        document.getElementById('writeName').focus();
+    }
+
+    function closeWriteModal() {
+        document.getElementById('writeModal').classList.remove('open');
+        document.getElementById('writeName').value = '';
+        document.getElementById('writeEmail').value = '';
+        document.getElementById('writeTitle').value = '';
+        document.getElementById('writeContent').value = '';
+        document.getElementById('writePassword').value = '';
+        document.getElementById('isPrivate').checked = false;
+        document.getElementById('passwordField').style.display = 'none';
+        document.getElementById('writeError').style.display = 'none';
+        document.getElementById('writeSuccess').style.display = 'none';
+    }
+
+    function togglePrivate() {
+        const cb = document.getElementById('isPrivate');
+        const pf = document.getElementById('passwordField');
+        // checkbox 클릭은 label 클릭으로 이미 토글됨
+        setTimeout(() => {
+            pf.style.display = cb.checked ? 'block' : 'none';
+            if (cb.checked) document.getElementById('writePassword').focus();
+        }, 10);
+    }
+
+    // ── 문의 제출 ────────────────────────────────────────
+    async function submitInquiry() {
+        const name     = document.getElementById('writeName').value.trim();
+        const email    = document.getElementById('writeEmail').value.trim();
+        const title    = document.getElementById('writeTitle').value.trim();
+        const content  = document.getElementById('writeContent').value.trim();
+        const category = document.getElementById('writeCategory').value;
+        const isPrivate= document.getElementById('isPrivate').checked;
+        const password = document.getElementById('writePassword').value;
+
+        const errEl = document.getElementById('writeError');
+        const okEl  = document.getElementById('writeSuccess');
+        errEl.style.display = 'none';
+        okEl.style.display  = 'none';
+
+        if (!name)    return showErr(errEl, '이름을 입력해주세요.');
+        if (!title)   return showErr(errEl, '제목을 입력해주세요.');
+        if (!content) return showErr(errEl, '내용을 입력해주세요.');
+        if (isPrivate && password.length < 4)
+            return showErr(errEl, '비밀번호는 4자 이상이어야 해요.');
+
+        let passwordHash = null;
+        if (isPrivate && password) {
+            passwordHash = await sha256(password);
+        }
+
+        const data = {
+            name,
+            email,
+            title,
+            content,
+            category,
+            isPrivate,
+            passwordHash,
+            status: 'pending',
+            answer: null,
+            answeredAt: null,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        };
+
+        try {
+            await db.collection('inquiries').add(data);
+            okEl.textContent = '✅ 문의가 접수되었어요! 빠르게 답변드릴게요.';
+            okEl.style.display = 'block';
+            setTimeout(() => {
+                closeWriteModal();
+                loadInquiries();
+            }, 1800);
+        } catch (e) {
+            console.error(e);
+            showErr(errEl, '제출 중 오류가 발생했어요. 다시 시도해주세요.');
+        }
+    }
+
+    // ── 보기 모달 ────────────────────────────────────────
+    async function openViewModal(docId) {
+        currentDocId = docId;
+        const item = inquiries.find(i => i.id === docId);
+        if (!item) return;
+
+        document.getElementById('viewTitle').textContent =
+            item.isPrivate ? '🔒 ' + (item.title || '비밀글') : item.title;
+        document.getElementById('viewModal').classList.add('open');
+        document.getElementById('viewContent').style.display = 'none';
+        document.getElementById('pwPrompt').style.display = 'none';
+        document.getElementById('pwError').style.display = 'none';
+
+        if (item.isPrivate) {
+            document.getElementById('pwPrompt').style.display = 'block';
+            setTimeout(() => document.getElementById('viewPassword').focus(), 100);
+        } else {
+            showViewContent(item);
+        }
+    }
+
+    function closeViewModal() {
+        document.getElementById('viewModal').classList.remove('open');
+        document.getElementById('viewPassword').value = '';
+        currentDocId = null;
+    }
+
+    async function checkPassword() {
+        const item = inquiries.find(i => i.id === currentDocId);
+        if (!item) return;
+
+        const entered = document.getElementById('viewPassword').value;
+        if (!entered) return;
+
+        const hash = await sha256(entered);
+        const errEl = document.getElementById('pwError');
+
+        if (hash === item.passwordHash) {
+            errEl.style.display = 'none';
+            document.getElementById('pwPrompt').style.display = 'none';
+            showViewContent(item);
+        } else {
+            showErr(errEl, '비밀번호가 틀렸어요.');
+            document.getElementById('viewPassword').value = '';
+            document.getElementById('viewPassword').focus();
+        }
+    }
+
+    function showViewContent(item) {
+        const date = item.createdAt?.toDate
+            ? formatDateFull(item.createdAt.toDate())
+            : (item.createdAt || '');
+
+        document.getElementById('metaName').textContent     = item.name;
+        document.getElementById('metaCategory').textContent = CATEGORY_LABELS[item.category] || item.category;
+        document.getElementById('metaDate').textContent     = date;
+        document.getElementById('metaStatus').innerHTML     =
+            item.status === 'answered'
+                ? '<span style="color:#10b981; font-weight:600;">답변완료</span>'
+                : '<span style="color:#f59e0b; font-weight:600;">답변대기</span>';
+
+        document.getElementById('mainContent').textContent = item.content;
+
+        const answerSection = document.getElementById('answerSection');
+        if (item.answer) {
+            answerSection.style.display = 'block';
+            document.getElementById('answerContent').textContent = item.answer;
+            const aDate = item.answeredAt?.toDate
+                ? formatDateFull(item.answeredAt.toDate()) : '';
+            document.getElementById('answerDate').textContent = aDate ? `답변일: ${aDate}` : '';
+        } else {
+            answerSection.style.display = 'none';
+        }
+
+        document.getElementById('viewContent').style.display = 'block';
+    }
+
+    // ── 유틸 ──────────────────────────────────────────
+    async function sha256(message) {
+        const msgBuffer = new TextEncoder().encode(message);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    function formatDate(date) {
+        return date.toLocaleDateString('ko-KR', {
+            year: 'numeric', month: '2-digit', day: '2-digit'
+        }).replace(/\. /g, '.').replace('.', '');
+    }
+
+    function formatDateFull(date) {
+        return date.toLocaleString('ko-KR', {
+            year: 'numeric', month: '2-digit', day: '2-digit',
+            hour: '2-digit', minute: '2-digit'
+        });
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    function showErr(el, msg) {
+        el.textContent = msg;
+        el.style.display = 'block';
+    }
+
+    // 모달 외부 클릭 시 닫기
+    document.getElementById('writeModal').addEventListener('click', function(e) {
+        if (e.target === this) closeWriteModal();
+    });
+    document.getElementById('viewModal').addEventListener('click', function(e) {
+        if (e.target === this) closeViewModal();
+    });
+    </script>
+</body>
+</html>

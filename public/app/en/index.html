@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="NeoGen - Smart AI Bookkeeping Assistant. Transparent financial management solution for institutions, organizations, corporations, and individuals. ESG governance transparency.">
+    <meta name="keywords" content="NeoGen, AI accounting, bookkeeping, double-entry, free accounting, financial management, journal, financial statements, Zenithus">
+    <meta name="author" content="Zenithus Labs">
+    <meta property="og:title" content="NeoGen - Smart AI Bookkeeping Assistant">
+    <meta property="og:description" content="AI-powered transparent financial management solution">
+    <meta property="og:type" content="website">
+    <title>NeoGen - Smart AI Bookkeeping Assistant</title>
+    <link rel="stylesheet" href="../styles.css">
+    
+    <!-- Google AdSense (to be activated from beta version) -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_PUBLISHER_ID" crossorigin="anonymous"></script>
+    
+    <!-- jsPDF library for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <!-- SheetJS library for Excel export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    
+    <!-- EmailJS library for email sending -->
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    
+    <!-- Multilingual support system -->
+    <script src="../i18n.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-controls">
+                <div class="language-switcher">
+                    <a href="../index.html" class="lang-link">🇰🇷 한국어</a>
+                    <span class="lang-separator">/</span>
+                    <span class="lang-current">🇺🇸 English</span>
+                </div>
+            </div>
+            
+            <h1 onclick="goToHome()" style="cursor: pointer; transition: color 0.3s ease;" onmouseover="this.style.color='#6366f1'" onmouseout="this.style.color='inherit'"><img src="../neo-character.png?v=2" alt="Neo" style="width: 40px; height: 40px; vertical-align: middle; margin-right: 10px;"> NeoGen</h1>
+            <p>Smart AI Bookkeeping Assistant</p>
+            <div class="intro-section" style="margin: 20px 0; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 10px; backdrop-filter: blur(10px);">
+                <p style="font-size: 1.1em; margin-bottom: 10px; color: rgba(255,255,255,0.9);">Transparent financial management solution for institutions, organizations, corporations & individuals</p>
+                <p style="font-size: 0.95em; color: rgba(255,255,255,0.8);">🎯 AI Auto-Classification | 📈 Real-time Transparency | 🌐 ESG Reporting | 🔒 Data Security</p>
+            </div>
+        </header>
+        
+        <!-- AdSense banner (to be activated after approval) -->
+        <div class="ad-container" style="text-align: center; margin: 20px 0; padding: 10px;">
+            <div style="background: #f8f9fa; border: 2px dashed #dee2e6; padding: 20px; border-radius: 8px; color: #6c757d;">
+                📊 <strong>Advertisement Area</strong> (Waiting for AdSense approval)
+            </div>
+        </div>
+
+        <nav class="nav-tabs">
+            <button class="tab-btn active" onclick="showTab('smart-input', this)">🤖 Smart Input</button>
+            <button class="tab-btn" onclick="showTab('file-import', this)" style="background: var(--accent-gradient); color: white; font-weight: 600;">📂 File Import</button>
+            <button class="tab-btn" onclick="showTab('dashboard', this)">📈 Dashboard</button>
+            <button class="tab-btn" onclick="showTab('accounts', this)">💼 Accounts</button>
+            <button class="tab-btn" onclick="showTab('journal', this)">📝 Journal</button>
+            <button class="tab-btn" onclick="showTab('ledger', this)">🏦 Ledger</button>
+            <button class="tab-btn" onclick="showTab('reports', this)">📊 Reports</button>
+            <button class="tab-btn" onclick="showTab('annual-report', this)">🌐 Annual Report</button>
+            <button class="tab-btn" onclick="showComingSoon('tutorial')">📚 Learn Accounting <span style="font-size: 10px; background: #ff6b6b; color: white; padding: 2px 6px; border-radius: 10px; margin-left: 5px;">SOON</span></button>
+        </nav>
+
+        <!-- Dashboard Tab -->
+        <div id="dashboard" class="tab-content">
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h3>📊 Financial Status</h3>
+                    <div class="financial-summary">
+                        <div class="summary-item">
+                            <span>Total Assets</span>
+                            <span id="totalAssets">$ 0</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Total Liabilities</span>
+                            <span id="totalLiabilities">$ 0</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Net Assets</span>
+                            <span id="totalEquity">$ 0</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Net Income</span>
+                            <span id="netIncome">$ 0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>🎯 AI Performance</h3>
+                    <div id="aiPerformanceSection">
+                        <p>Processing transactions... 🤖</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>📈 Recent Transactions</h3>
+                    <div id="recentTransactions">
+                        <p>No recent transactions</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Smart Input Tab -->
+        <div id="smart-input" class="tab-content active">
+            <div class="card">
+                <div class="card-header">
+                    <h3>🤖 AI Smart Transaction Input</h3>
+                    <p>Simply describe your transaction and AI will automatically categorize it!</p>
+                </div>
+                
+                <div class="smart-input-form">
+                    <div class="form-group">
+                        <label for="smartDescription">💬 Transaction Description</label>
+                        <input type="text" id="smartDescription" placeholder="e.g., Bought office supplies at Amazon for $50" />
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="smartAmount">💰 Amount</label>
+                            <input type="number" id="smartAmount" placeholder="50.00" step="0.01" />
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="smartType">🏷️ Transaction Type</label>
+                            <select id="smartType">
+                                <option value="">🤖 Let AI decide</option>
+                                <option value="expense">💸 Expense</option>
+                                <option value="revenue">💰 Revenue</option>
+                                <option value="asset">🏦 Asset</option>
+                                <option value="liability">📋 Liability</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <button type="button" class="btn btn-primary" onclick="analyzeTransaction()">
+                        ✨ Process with AI
+                    </button>
+                </div>
+                
+                <!-- Neo AI Analyzing -->
+                <div id="neoAnalyzing" class="smart-neo" style="display: none;">
+                    <img src="../neo-character1.png?v=202508152145" alt="Neo AI" style="width: 100%; height: 100%;">
+                    <div style="text-align: center; margin-top: 20px; color: #6366f1; font-weight: 700; font-size: 18px; line-height: 1.4; max-width: 300px; margin-left: auto; margin-right: auto;">
+                        🔍 Neo is analyzing<br>intelligently... 📊
+                    </div>
+                </div>
+
+                <!-- AI Recommendation Display -->
+                <div id="aiRecommendation" class="ai-recommendation" style="display: none;">
+                    <h4>🎯 AI Analysis Result</h4>
+                    <div id="recommendationContent"></div>
+                    <div class="recommendation-actions">
+                        <button class="btn btn-success" onclick="applyRecommendation()">✅ Apply</button>
+                        <button class="btn btn-secondary" onclick="clearRecommendation()">❌ Cancel</button>
+                    </div>
+                </div>
+
+                <!-- Neo Character (Smart Input) -->
+                <div class="neo-character">
+                    <img src="../neo-character1.png?v=202508152145" alt="Neo AI Assistant" id="neoImage">
+                    <div class="neo-bubble">
+                        👋 Hi! I'm Neo, your smart bookkeeping assistant. Describe any transaction and I'll handle the accounting for you!
+                    </div>
+                </div>
+                
+
+            </div>
+        </div>
+
+        <!-- File Import Tab -->
+        <div id="file-import" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h3>📂 CSV File Import</h3>
+                    <p>Import transaction data from CSV files</p>
+                </div>
+                
+                <div class="file-upload-section">
+                    <div class="upload-area" onclick="document.getElementById('csvFileInput').click()">
+                        <div class="upload-icon">📁</div>
+                        <p><strong>Click to select CSV file</strong></p>
+                        <p>or drag and drop here</p>
+                        <input type="file" id="csvFileInput" accept=".csv" style="display: none;" onchange="handleFileUpload(event)">
+                    </div>
+                    
+                    <div class="csv-format-info">
+                        <h4>📋 Required CSV Format:</h4>
+                        <div class="format-example">
+                            <code>Date, Description, Amount, Type</code><br>
+                            <code>2024-01-15, Office supplies, 50000, expense</code><br>
+                            <code>2024-01-16, Membership fees, 100000, revenue</code>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="csvPreview" style="display: none;">
+                    <h4>📊 Preview</h4>
+                    <div class="table-responsive">
+                        <table id="csvPreviewTable">
+                            <thead></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="preview-actions">
+                        <button class="btn btn-primary" onclick="processCsvData()">✅ Import Data</button>
+                        <button class="btn btn-secondary" onclick="cancelCsvImport()">❌ Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Annual Report Tab -->
+        <div id="annual-report" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h3>🌐 Annual Public Disclosure</h3>
+                    <p>Generate annual financial reports that can be directly uploaded to your organization's website!</p>
+                </div>
+                
+                <div class="annual-setup">
+                    <h4>📋 Report Information Setup</h4>
+                    <div class="setup-form">
+                        
+                        <!-- 🌍 International Standards Selection -->
+                        <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                            <div class="form-group">
+                                <label for="accountingStandard">🌍 Accounting Standard</label>
+                                <select id="accountingStandard" onchange="updateAccountingStandardInfo()">
+                                    <option value="ifrs-sme">IFRS for SMEs (International)</option>
+                                    <option value="us-gaap">US GAAP (United States)</option>
+                                    <option value="k-ifrs">K-IFRS (Korea)</option>
+                                    <option value="custom">Other (Custom)</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="reportCurrency">💱 Reporting Currency</label>
+                                <select id="reportCurrency" onchange="updateCurrencyFormat()">
+                                    <option value="USD">USD ($) - US Dollar</option>
+                                    <option value="EUR">EUR (€) - Euro</option>
+                                    <option value="GBP">GBP (£) - British Pound</option>
+                                    <option value="KRW">KRW (₩) - Korean Won</option>
+                                    <option value="CAD">CAD (C$) - Canadian Dollar</option>
+                                    <option value="AUD">AUD (A$) - Australian Dollar</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="organizationName">Institution/Organization/Corporation Name</label>
+                            <input type="text" id="organizationName" placeholder="e.g., Korean Academic Society, Research Institute, Foundation" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="reportYear">Report Year</label>
+                            <select id="reportYear">
+                                <option value="2024">2024</option>
+                                <option value="2023">2023</option>
+                                <option value="2022">2022</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="reportType">Report Type</label>
+                            <select id="reportType">
+                                <option value="annual">Annual Financial Disclosure</option>
+                                <option value="general">General Assembly Report</option>
+                                <option value="audit">Audit Report</option>
+                                <option value="government">Government Submission</option>
+                                <option value="esg-integrated">🌿 ESG Integrated Report</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="presidentName">Chief Executive Name (Optional)</label>
+                            <input type="text" id="presidentName" placeholder="John Doe">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="treasurerName">Financial Officer Name (Optional)</label>
+                            <input type="text" id="treasurerName" placeholder="Jane Smith">
+                        </div>
+                        
+                        <button class="btn btn-primary" onclick="generateAnnualReport()">
+                            🌐 Generate Report
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="usage-guide">
+                    <h4>📖 Usage Guide</h4>
+                    <div class="guide-steps">
+                        <div class="step">
+                            <span class="step-number">1</span>
+                            <div class="step-content">
+                                <h5>Information Input</h5>
+                                <p>Enter institution name, report year, and contact information</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">2</span>
+                            <div class="step-content">
+                                <h5>Generate Report</h5>
+                                <p>AI automatically creates financial statements and transparency reports</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <span class="step-number">3</span>
+                            <div class="step-content">
+                                <h5>Download & Upload</h5>
+                                <p>Download HTML file and upload directly to your website</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Other sections remain the same structure but with English text -->
+        <!-- Accounts Tab -->
+        <div id="accounts" class="tab-content">
+            <div class="card">
+                <h3>💼 Chart of Accounts</h3>
+                <button class="btn btn-primary" onclick="openAccountModal()">➕ Add Account</button>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Code</th>
+                                <th>Account Name</th>
+                                <th>Type</th>
+                                <th>Balance</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="accountsTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Journal Tab -->
+        <div id="journal" class="tab-content">
+            <div class="card">
+                <h3>📝 Journal Entries</h3>
+                <button class="btn btn-primary" onclick="openJournalModal()">➕ Add Entry</button>
+                <button class="btn btn-success" onclick="batchApplyToLedger()" style="margin-left: 10px;">🔄 Batch Apply All</button>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Description</th>
+                                <th>Account</th>
+                                <th>Debit</th>
+                                <th>Credit</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="journalTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ledger Tab -->
+        <div id="ledger" class="tab-content">
+            <div class="card">
+                <h3>🏦 General Ledger</h3>
+                <div class="ledger-controls">
+                    <select id="ledgerAccountSelect" onchange="showLedger()">
+                        <option value="">Select an account</option>
+                    </select>
+                </div>
+                <div id="ledgerContent">
+                    <p>Select an account to view its ledger</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reports Tab -->
+        <div id="reports" class="tab-content">
+            <div class="card">
+                <h3>📊 Financial Statements</h3>
+                <div class="report-buttons">
+                    <button class="btn btn-primary" onclick="generateReports()">🔄 Refresh Reports</button>
+                    <button class="btn btn-secondary" onclick="downloadPDF()">📄 Download PDF</button>
+                    <button class="btn btn-secondary" onclick="downloadExcel()">📊 Download Excel</button>
+                </div>
+                <div id="reportsContent">
+                    <div class="report-section">
+                        <h4>🏛️ Balance Sheet</h4>
+                        <div id="balanceSheet"></div>
+                    </div>
+                    <div class="report-section">
+                        <h4>📈 Income Statement</h4>
+                        <div id="incomeStatement"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>🌟 NeoGen</h4>
+                <p>Smart AI Bookkeeping Assistant</p>
+                <p>Making financial transparency accessible to everyone</p>
+            </div>
+            
+            <div class="footer-section">
+                <h4>🔗 Quick Links</h4>
+                <ul>
+                    <li><a href="#" onclick="showComingSoon('privacy')">Privacy Policy</a></li>
+                    <li><a href="#" onclick="showComingSoon('terms')">Terms of Service</a></li>
+                    <li><a href="#" onclick="showComingSoon('support')">Support</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h4>📞 Contact</h4>
+                <p>💬 Feedback & Support</p>
+                <form name="feedback" method="POST" data-netlify="true" onsubmit="handleFeedbackSubmit(event)" style="max-width: 600px; margin: 0 auto; text-align: left;">
+                    <div style="margin-bottom: 15px;">
+                        <label for="name" style="display: block; margin-bottom: 5px; font-weight: bold;">Name:</label>
+                        <input type="text" id="name" name="name" required style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label for="email" style="display: block; margin-bottom: 5px; font-weight: bold;">Email:</label>
+                        <input type="email" id="email" name="email" required style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label for="category" style="display: block; margin-bottom: 5px; font-weight: bold;">Category:</label>
+                        <select id="category" name="category" required style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                            <option value="">Select category</option>
+                            <option value="bug">🐛 Bug Report</option>
+                            <option value="feature">💡 Feature Request</option>
+                            <option value="question">❓ Question</option>
+                            <option value="other">📝 Other</option>
+                        </select>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label for="message" style="display: block; margin-bottom: 5px; font-weight: bold;">Message:</label>
+                        <textarea id="message" name="message" required rows="4" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; resize: vertical;"></textarea>
+                    </div>
+                    <button type="submit" style="background: #667eea; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">
+                        📤 Send Feedback
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>© 2024 <strong>Zenithus Labs</strong>. Built with ❤️ for transparent financial management.</p>
+            <p>🤖 Powered by <strong>Neo AI</strong> | 🌍 Supporting ESG governance worldwide</p>
+        </div>
+    </footer>
+
+    <!-- Neo AI Search (Simple Bottom Panel) -->
+    <div style="position: fixed; bottom: 120px; right: 120px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; padding: 20px; color: white; max-width: 300px; box-shadow: 0 4px 20px rgba(0,0,0,0.2); z-index: 999;">
+        <div style="display: flex; align-items: center; margin-bottom: 15px;">
+            <img src="../neo-character.png?v=2" alt="Neo AI" style="width: 30px; height: 30px; margin-right: 10px;">
+            <div>
+                <h6 style="margin: 0; color: white; font-size: 14px;">🧠 Ask Neo!</h6>
+                <small style="opacity: 0.8; font-size: 11px;">Accounting questions</small>
+            </div>
+        </div>
+        
+        <input type="text" id="neoSearchInputEn" placeholder="What is double-entry?" 
+               style="width: 100%; padding: 8px; border: none; border-radius: 6px; font-size: 13px; margin-bottom: 10px;"
+               onkeypress="handleNeoSearchEn(event)">
+        
+        <div id="neoSearchResultEn" style="background: rgba(255,255,255,0.1); border-radius: 6px; padding: 10px; font-size: 12px; line-height: 1.4; display: none;">
+            <!-- AI responses will be displayed here -->
+        </div>
+    </div>
+
+    <!-- Neo Helper -->
+    <div id="neoHelper" class="neo-character" onclick="toggleNeoBubble()">
+        <img src="../neo-character.png?v=2" alt="Neo Helper" style="width: 100%; height: 100%;">
+    </div>
+    
+    <!-- Neo Speech Bubble -->
+    <div id="neoBubble" class="neo-bubble">
+        Hello! I'm Neo ✨<br>
+        Feel free to ask me anything about bookkeeping!
+    </div>
+
+    <!-- Modals and other elements (keep same structure, translate text) -->
+    <!-- Account Modal -->
+    <div id="accountModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAccountModal()">&times;</span>
+            <h3>Add New Account</h3>
+            <form id="accountForm" onsubmit="addAccount(event)">
+                <div class="form-group">
+                    <label for="accountCode">Account Code</label>
+                    <input type="text" id="accountCode" required>
+                </div>
+                <div class="form-group">
+                    <label for="accountName">Account Name</label>
+                    <input type="text" id="accountName" required>
+                </div>
+                <div class="form-group">
+                    <label for="accountType">Type</label>
+                    <select id="accountType" required>
+                        <option value="">Select type</option>
+                        <option value="asset">Asset</option>
+                        <option value="liability">Liability</option>
+                        <option value="equity">Equity</option>
+                        <option value="revenue">Revenue</option>
+                        <option value="expense">Expense</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Add Account</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Journal Modal -->
+    <div id="journalModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeJournalModal()">&times;</span>
+            <h3>Add Journal Entry</h3>
+            <form id="journalForm" onsubmit="addJournalEntry(event)">
+                <div class="form-group">
+                    <label for="journalDate">Date</label>
+                    <input type="date" id="journalDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="journalDescription">Description</label>
+                    <input type="text" id="journalDescription" placeholder="Transaction description" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="debitAccount">Debit Account</label>
+                        <select id="debitAccount" required>
+                            <option value="">Select debit account</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="creditAccount">Credit Account</label>
+                        <select id="creditAccount" required>
+                            <option value="">Select credit account</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="journalAmount">Amount</label>
+                    <input type="number" id="journalAmount" step="0.01" min="0" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Add Entry</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Load JavaScript -->
+    <script src="script-en.js"></script>
+</body>
+</html>

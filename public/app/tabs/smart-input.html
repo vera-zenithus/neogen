@@ -1,0 +1,120 @@
+<div style="display: grid; grid-template-columns: 1fr 280px; gap: 20px; align-items: start;">
+    <!-- 메인 Smart Input -->
+    <div class="card">
+    <div class="card-header">
+        <h3>🤖 AI 스마트 입력</h3>
+        <p>거래 내용만 입력하면 <strong>AI가 자동으로 분개를 추천</strong>해드립니다!</p>
+    </div>
+
+    <div class="smart-input-form">
+        <div class="form-group">
+            <label for="smartDate">날짜</label>
+            <input type="date" id="smartDate" required>
+        </div>
+
+        <div class="form-group">
+            <label for="smartDescription"><strong>🔍 거래 내용 설명</strong></label>
+            <input type="text" id="smartDescription" placeholder="예: 사무용품 구입, 연회비 수입, 학술대회 개최비 등" required style="padding: 12px; font-size: 14px;">
+            <small style="display: block; margin-top: 8px; color: #6b7280; font-style: italic;">
+                🤖 <strong>AI 도움:</strong> 구체적으로 작성할수록 더 정확한 분개를 추천받을 수 있어요!<br>
+                ✨ <strong>예시:</strong> "사무용품 구입", "학회 연회비 수입", "강사료 지급" 등
+            </small>
+        </div>
+
+        <div class="form-group">
+            <label for="smartAmount">금액</label>
+            <input type="number" id="smartAmount" placeholder="숫자만 입력 (예: 100000)" min="0" step="1" required>
+        </div>
+
+        <div class="form-group">
+            <label for="transactionType">거래 유형</label>
+            <select id="transactionType" onchange="updateSmartClassification()">
+                <option value="">자동 감지</option>
+                <option value="income">수입 (돈이 들어옴)</option>
+                <option value="expense">지출 (돈이 나감)</option>
+                <option value="transfer">이체/자산 이동</option>
+            </select>
+        </div>
+
+        <button type="button" class="btn btn-primary" onclick="analyzeTransaction()">🔍 AI 분석 및 분개 추천</button>
+    </div>
+
+    <!-- 네오 AI 분석 중 -->
+    <div id="neoAnalyzing" class="smart-neo" style="display: none;">
+        <img src="neo-character1.png?v=202508152145" alt="Neo AI" style="width: 100%; height: 100%;">
+        <div style="text-align: center; margin-top: 20px; color: #6366f1; font-weight: 700; font-size: 18px; line-height: 1.4; max-width: 300px; margin-left: auto; margin-right: auto;">
+            🔍 네오가 똑똑하게<br>분석 중이에요... 📊
+        </div>
+    </div>
+
+    <!-- AI 추천 결과 -->
+    <div id="aiRecommendation" class="ai-recommendation" style="display: none;">
+        <h4>🎯 AI 추천 분개</h4>
+        <div class="recommendation-content">
+            <div id="recommendedEntry"></div>
+            <div class="recommendation-confidence">
+                <span>신뢰도: <span id="confidenceScore">-</span>%</span>
+            </div>
+            <div class="recommendation-actions">
+                <button class="btn btn-primary" onclick="applyRecommendation()">✅ 이 분개 적용</button>
+                <button class="btn btn-secondary" onclick="editRecommendation()">✏️ 수정하기</button>
+                <button class="btn btn-secondary" onclick="clearRecommendation()">🗑️ 다시 입력</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 학습 패턴 표시 -->
+    <div class="learning-patterns">
+        <h4>📚 학습된 패턴</h4>
+        <div id="learnedPatterns">
+            <p class="no-data">아직 학습된 패턴이 없습니다. 거래를 입력하시면 패턴을 학습합니다.</p>
+        </div>
+    </div>
+    </div>
+
+    <!-- 사이드 광고 패널 (젠 전략 3번) -->
+    <div class="side-ad-panel" style="position: sticky; top: 20px;">
+        <!-- AdSense 사이드 광고 (승인 후 활성화) -->
+        <!-- 네오 AI 검색 (베라 아이디어 - 우선순위 UP!) -->
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 8px; padding: 20px; color: white; margin-bottom: 20px;">
+            <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                <img src="neo-character.png?v=2" alt="Neo AI" style="width: 40px; height: 40px; margin-right: 10px;">
+                <div>
+                    <h5 style="margin: 0; color: white;">🧠 네오에게 물어보세요!</h5>
+                    <small style="opacity: 0.8;">회계 질문이 있으시면 언제든지</small>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <input type="text" id="neoSearchInput" placeholder="예: 복식부기란 무엇인가요?"
+                       style="width: 100%; padding: 10px; border: none; border-radius: 6px; font-size: 14px;"
+                       onkeypress="handleNeoSearch(event)">
+            </div>
+
+            <div id="neoSearchResult" style="background: rgba(255,255,255,0.1); border-radius: 6px; padding: 15px; font-size: 13px; line-height: 1.4; display: none;">
+                <!-- AI 답변이 여기에 표시됩니다 -->
+            </div>
+
+            <div style="text-align: center; margin-top: 10px;">
+                <small style="opacity: 0.7;">💡 "복식부기", "분개", "계정과목" 등을 검색해보세요!</small>
+            </div>
+        </div>
+
+        <div style="background: #fff; border: 1px solid #e9ecef; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+            <!--
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-YOUR_PUBLISHER_ID"
+                 data-ad-slot="YOUR_AD_SLOT_ID"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+            -->
+            <div style="text-align: center; padding: 40px 20px; color: #6c757d; border: 2px dashed #dee2e6; border-radius: 6px;">
+                📊<br><strong>회계 도구</strong><br><small>사이드 광고</small>
+            </div>
+        </div>
+    </div>
+</div>

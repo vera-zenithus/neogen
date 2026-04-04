@@ -33,9 +33,9 @@ export const NeoGenIcon: React.FC<NeoGenLogoProps> = ({ size = 32, className = '
 
 export const NeoGenWordmark: React.FC<{ className?: string }> = ({ className = '' }) => (
   <span className={`font-bold text-lg tracking-tight flex items-center gap-0 ${className}`}>
-    <span className="text-cyan-400">Neo</span>
+    <a href="https://neogenworld.com" className="text-cyan-400 hover:opacity-80 transition-opacity">Neo</a>
     <span className="mx-1.5 w-px h-4 bg-cyan-400/70 inline-block" />
-    <span className="text-white">Gen</span>
+    <a href="/app" className="text-white hover:opacity-80 transition-opacity">Gen</a>
   </span>
 )
 

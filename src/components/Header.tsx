@@ -35,9 +35,9 @@ const Header: React.FC = () => {
       <nav className="section-container">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <a href="/" className="flex items-center group">
+          <div className="flex items-center">
             <NeoGenWordmark className="text-xl" />
-          </a>
+          </div>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
@@ -61,7 +61,7 @@ const Header: React.FC = () => {
             </button>
 
             <a
-              href="https://app.neogenworld.com"
+              href="https://neogenworld.com/app"
               className="btn-primary text-sm"
             >
               {t.startFree}
@@ -100,7 +100,7 @@ const Header: React.FC = () => {
                 </a>
               ))}
               <a
-                href="https://app.neogenworld.com"
+                href="https://neogenworld.com/app"
                 className="block w-full text-center py-3 mt-2 bg-cyan-500 hover:bg-cyan-400 text-white rounded-xl font-semibold transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >

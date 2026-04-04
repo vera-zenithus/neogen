@@ -1,0 +1,29 @@
+<div class="card">
+    <div class="card-header">
+        <h3 data-i18n="accounts.title">💼 계정과목 관리</h3>
+        <button class="btn btn-primary" onclick="openAccountModal()" data-i18n="accounts.add_account">+ 계정 추가</button>
+    </div>
+
+    <div class="account-categories">
+        <div class="category">
+            <h4 data-i18n="account_type.asset">자산 (Assets)</h4>
+            <div id="assetAccounts" class="account-list"></div>
+        </div>
+        <div class="category">
+            <h4 data-i18n="account_type.liability">부채 (Liabilities)</h4>
+            <div id="liabilityAccounts" class="account-list"></div>
+        </div>
+        <div class="category">
+            <h4 data-i18n="account_type.equity">자본 (Equity)</h4>
+            <div id="equityAccounts" class="account-list"></div>
+        </div>
+        <div class="category">
+            <h4 data-i18n="account_type.revenue">수익 (Revenue)</h4>
+            <div id="revenueAccounts" class="account-list"></div>
+        </div>
+        <div class="category">
+            <h4 data-i18n="account_type.expense">비용 (Expenses)</h4>
+            <div id="expenseAccounts" class="account-list"></div>
+        </div>
+    </div>
+</div>

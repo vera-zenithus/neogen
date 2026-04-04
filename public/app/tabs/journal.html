@@ -1,0 +1,26 @@
+<div class="card">
+    <div class="card-header">
+        <h3 data-i18n="journal.title">📝 분개장 (Journal Entry)</h3>
+        <div style="display: flex; gap: 10px;">
+            <button class="btn btn-primary" onclick="openJournalModal()" data-i18n="journal.add_entry">+ 분개 작성</button>
+            <button class="btn btn-success" onclick="batchApplyToLedger()" style="background: #28a745;">🔄 전체 일괄적용</button>
+        </div>
+    </div>
+
+    <div class="journal-entries">
+        <table id="journalTable">
+            <thead>
+                <tr>
+                    <th data-i18n="journal.date">날짜</th>
+                    <th data-i18n="accounts.account_name">계정</th>
+                    <th data-i18n="journal.description">적요</th>
+                    <th data-i18n="form.debit">차변</th>
+                    <th data-i18n="form.credit">대변</th>
+                    <th data-i18n="accounts.actions">액션</th>
+                </tr>
+            </thead>
+            <tbody id="journalTableBody">
+            </tbody>
+        </table>
+    </div>
+</div>

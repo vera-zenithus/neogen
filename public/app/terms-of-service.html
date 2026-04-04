@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>서비스 이용약관 — NeoGen</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: #f0f4f8;
+            color: #1e293b;
+            line-height: 1.7;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 760px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(15,23,42,0.08);
+            overflow: hidden;
+        }
+        .doc-header {
+            background: #0f172a;
+            padding: 36px 40px;
+            color: white;
+        }
+        .doc-header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .doc-header p { color: rgba(255,255,255,0.5); font-size: 13px; }
+        .meta {
+            display: flex; gap: 24px; margin-top: 16px; flex-wrap: wrap;
+        }
+        .meta span {
+            font-size: 12px; color: rgba(255,255,255,0.4);
+        }
+        .meta strong { color: rgba(6,182,212,0.9); }
+        .content { padding: 40px; }
+        h2 {
+            font-size: 15px; font-weight: 700; color: #0f172a;
+            margin: 36px 0 12px; padding-bottom: 8px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        h3 {
+            font-size: 13px; font-weight: 600; color: #334155;
+            margin: 20px 0 8px;
+        }
+        p { font-size: 14px; color: #475569; margin-bottom: 12px; }
+        ul, ol {
+            font-size: 14px; color: #475569;
+            padding-left: 20px; margin-bottom: 12px;
+        }
+        li { margin-bottom: 6px; }
+        .box {
+            border-radius: 10px; padding: 16px 20px;
+            margin: 16px 0; font-size: 13px;
+        }
+        .box-info {
+            background: rgba(37,99,235,0.06);
+            border-left: 3px solid #2563eb;
+            color: #1e40af;
+        }
+        .box-warn {
+            background: rgba(245,158,11,0.07);
+            border-left: 3px solid #f59e0b;
+            color: #92400e;
+        }
+        .box-danger {
+            background: rgba(239,68,68,0.06);
+            border-left: 3px solid #ef4444;
+            color: #991b1b;
+        }
+        table {
+            width: 100%; border-collapse: collapse;
+            font-size: 13px; margin: 12px 0;
+        }
+        th, td { padding: 10px 14px; border: 1px solid #e2e8f0; text-align: left; }
+        th { background: #f8fafc; font-weight: 600; color: #334155; }
+        td { color: #475569; }
+        footer {
+            text-align: center; padding: 24px 40px;
+            border-top: 1px solid #e2e8f0;
+            font-size: 12px; color: #94a3b8;
+        }
+        a { color: #2563eb; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        @media (max-width: 600px) {
+            .doc-header, .content { padding: 24px 20px; }
+            .meta { flex-direction: column; gap: 8px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="doc-header">
+            <h1>NeoGen 서비스 이용약관</h1>
+            <p>Terms of Service — NeoGen by NEOGEN</p>
+            <div class="meta">
+                <span><strong>시행일</strong> 2026년 3월 28일</span>
+                <span><strong>제공자</strong> NEOGEN</span>
+                <span><strong>문의</strong> support@neogenworld.com</span>
+            </div>
+        </div>
+
+        <div class="content">
+
+            <h2>제1조 (목적)</h2>
+            <p>본 약관은 NEOGEN(이하 "회사")이 운영하는 NeoGen(네오젠) 서비스(이하 "서비스")의 이용조건 및 절차, 회사와 이용자 간의 권리·의무·책임사항을 규정함을 목적으로 합니다.</p>
+
+            <h2>제2조 (용어 정의)</h2>
+            <ul>
+                <li><strong>"서비스"</strong>: 회사가 neogenworld.com을 통해 제공하는 AI 기반 복식부기 회계 관리 시스템 및 관련 기능 일체</li>
+                <li><strong>"이용자"</strong>: 본 약관에 동의하고 서비스를 이용하는 개인 또는 법인</li>
+                <li><strong>"회원"</strong>: 이메일 또는 소셜 계정으로 가입하여 서비스를 이용하는 이용자</li>
+                <li><strong>"비회원"</strong>: 로그인 없이 서비스를 체험하는 이용자</li>
+                <li><strong>"유료 회원"</strong>: Pro 또는 Organization 플랜을 구독한 회원</li>
+                <li><strong>"회계 데이터"</strong>: 이용자가 서비스에 입력하는 거래내역, 계정과목, 재무제표 등 일체</li>
+            </ul>
+
+            <h2>제3조 (서비스의 제공)</h2>
+
+            <h3>3.1 제공 서비스</h3>
+            <table>
+                <tr>
+                    <th>기능</th>
+                    <th>Free</th>
+                    <th>Pro ($14/월)</th>
+                    <th>Organization ($99/월)</th>
+                </tr>
+                <tr>
+                    <td>복식부기 / 분개</td>
+                    <td>월 100건</td>
+                    <td>무제한</td>
+                    <td>무제한</td>
+                </tr>
+                <tr>
+                    <td>재무제표 (대차대조표·손익계산서)</td>
+                    <td>✓</td>
+                    <td>✓</td>
+                    <td>✓</td>
+                </tr>
+                <tr>
+                    <td>Neo AI 스마트 입력 (Claude API)</td>
+                    <td>기본</td>
+                    <td>전체</td>
+                    <td>전체</td>
+                </tr>
+                <tr>
+                    <td>클라우드 저장 (Firestore)</td>
+                    <td>✓ (로그인 시)</td>
+                    <td>✓</td>
+                    <td>✓</td>
+                </tr>
+                <tr>
+                    <td>Excel / PDF 내보내기</td>
+                    <td>-</td>
+                    <td>✓</td>
+                    <td>✓</td>
+                </tr>
+                <tr>
+                    <td>연말공시 자동 생성</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>✓</td>
+                </tr>
+                <tr>
+                    <td>팀원 초대</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>최대 5명</td>
+                </tr>
+            </table>
+
+            <h3>3.2 비회원 이용</h3>
+            <p>로그인 없이도 서비스 체험이 가능합니다. 단, 비회원 상태에서의 데이터는 해당 기기의 브라우저(LocalStorage)에만 저장되며, 기기 변경 또는 브라우저 초기화 시 삭제됩니다.</p>
+
+            <h3>3.3 AI 기능 (Neo)</h3>
+            <p>서비스 내 AI 어시스턴트 "네오(Neo)"는 Anthropic의 Claude API를 사용합니다. AI의 회계 분류 및 추천은 참고용이며, 법적·세무적 효력을 보장하지 않습니다.</p>
+
+            <h2>제4조 (회원 가입 및 계정)</h2>
+
+            <h3>4.1 가입 방법</h3>
+            <ul>
+                <li>Google 계정 연동 로그인</li>
+                <li>이메일/비밀번호 직접 가입</li>
+            </ul>
+
+            <h3>4.2 계정 관리 의무</h3>
+            <ul>
+                <li>이용자는 계정 정보(이메일, 비밀번호)를 안전하게 관리할 의무가 있습니다.</li>
+                <li>계정 도용으로 인한 피해에 대해 회사는 책임지지 않습니다.</li>
+                <li>타인의 계정을 무단으로 사용하는 것을 금지합니다.</li>
+            </ul>
+
+            <h2>제5조 (요금 및 결제)</h2>
+
+            <h3>5.1 유료 플랜</h3>
+            <ul>
+                <li><strong>Pro</strong>: 월 $14 USD (또는 연간 $99)</li>
+                <li><strong>Organization</strong>: 월 $99 USD (또는 연간 $999)</li>
+                <li>요금은 부가세(VAT) 별도이며, 국가 및 결제 방법에 따라 달라질 수 있습니다.</li>
+            </ul>
+
+            <h3>5.2 결제 처리</h3>
+            <p>결제는 Paddle.com이 Merchant of Record로 처리합니다. 회사는 카드번호 등 결제 정보를 직접 저장하지 않습니다. Paddle은 관련 세금(VAT 등) 처리를 포함한 결제 전반을 담당합니다.</p>
+
+            <h3>5.3 환불 정책</h3>
+            <ul>
+                <li>결제 후 <strong>14일 이내</strong>에 요청하시면 전액 환불 가능합니다.</li>
+                <li>환불 요청: billing@neogenworld.com</li>
+            </ul>
+
+            <h3>5.4 구독 취소</h3>
+            <p>구독은 언제든지 취소할 수 있으며, 취소 시 현재 결제 기간 만료 후 Free 플랜으로 자동 전환됩니다.</p>
+
+            <h2>제6조 (데이터 관리 및 책임)</h2>
+
+            <div class="box box-warn">
+                <strong>⚠️ 중요:</strong> 회계 데이터의 정확성 및 법적 적합성에 대한 최종 책임은 이용자에게 있습니다. NeoGen은 회계 소프트웨어이며, 공인 회계사 서비스가 아닙니다.
+            </div>
+
+            <h3>6.1 데이터 저장 방식</h3>
+            <ul>
+                <li><strong>비회원</strong>: 브라우저 LocalStorage에만 저장 (서버 전송 없음)</li>
+                <li><strong>회원 (로그인 시)</strong>: Firebase Firestore (Google 클라우드)에 암호화 저장</li>
+            </ul>
+
+            <h3>6.2 데이터 손실 면책</h3>
+            <ul>
+                <li>비회원의 브라우저 삭제·초기화로 인한 데이터 손실</li>
+                <li>천재지변, 해킹 등 불가항력으로 인한 데이터 손실</li>
+                <li>이용자의 실수로 인한 데이터 삭제</li>
+            </ul>
+
+            <h2>제7조 (이용자의 의무)</h2>
+            <ul>
+                <li>관련 법령 및 본 약관 준수</li>
+                <li>타인의 정보 도용 금지</li>
+                <li>서비스의 비정상적 사용(크롤링, 자동화 공격 등) 금지</li>
+                <li>허위 정보 입력 금지</li>
+                <li>중요 데이터 정기 백업 권장</li>
+            </ul>
+
+            <h2>제8조 (서비스 제한 및 중단)</h2>
+            <p>다음의 경우 사전 공지 없이 서비스 이용을 제한하거나 중단할 수 있습니다.</p>
+            <ul>
+                <li>법령 위반 또는 약관 위반 행위</li>
+                <li>시스템 보안 위협 발생</li>
+                <li>서버 점검 및 긴급 업데이트</li>
+                <li>천재지변 등 불가항력적 사유</li>
+            </ul>
+
+            <h2>제9조 (책임의 제한)</h2>
+
+            <div class="box box-danger">
+                회사는 서비스를 "있는 그대로(AS-IS)" 제공하며, 서비스의 중단·오류·데이터 손실로 인한 간접적·부수적 손해에 대해 책임을 지지 않습니다.
+            </div>
+
+            <ul>
+                <li>AI 회계 추천의 오류로 인한 세무·법적 손해</li>
+                <li>제3자 서비스(Google, Stripe, Anthropic 등)의 장애로 인한 피해</li>
+                <li>이용자의 귀책으로 인한 데이터 손실</li>
+            </ul>
+
+            <h2>제10조 (지적재산권)</h2>
+            <ul>
+                <li>서비스의 소프트웨어, 디자인, 브랜드, 캐릭터(네오)의 지적재산권은 회사에 귀속됩니다.</li>
+                <li>이용자가 입력한 회계 데이터의 소유권은 이용자에게 있습니다.</li>
+                <li>AI 학습 패턴 및 분류 결과는 회사의 지적재산입니다.</li>
+            </ul>
+
+            <h2>제11조 (분쟁 해결)</h2>
+            <ul>
+                <li><strong>준거법:</strong> 대한민국 법률</li>
+                <li><strong>관할법원:</strong> 회사 소재지 관할 법원</li>
+                <li><strong>분쟁조정:</strong> 한국소비자원 또는 소비자분쟁조정위원회</li>
+            </ul>
+
+            <h2>제12조 (약관의 변경)</h2>
+            <p>회사는 약관을 변경할 경우 시행 <strong>30일 전</strong> neogenworld.com 공지사항 및 이메일을 통해 안내합니다. 변경된 약관에 동의하지 않는 경우, 서비스 이용을 중단하고 탈퇴할 수 있습니다.</p>
+
+            <h2>제13조 (문의)</h2>
+            <ul>
+                <li>📧 일반 문의: support@neogenworld.com</li>
+                <li>📧 결제 문의: billing@neogenworld.com</li>
+                <li>🌐 웹사이트: neogenworld.com</li>
+                <li>🏢 Zenithus Labs (제니스어스 연구소)</li>
+            </ul>
+
+        </div>
+
+        <footer>
+            <p>본 약관은 2026년 3월 21일부터 시행됩니다.</p>
+            <p style="margin-top:6px;">© 2026 NEOGEN. All rights reserved. · <a href="privacy-policy.html">개인정보처리방침</a></p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<div class="card">
+    <div class="card-header">
+        <h3 data-i18n="reports.title">📊 재무제표 및 리포트</h3>
+        <div class="export-buttons">
+            <button class="btn btn-primary" onclick="exportToPDF()" data-i18n="reports.export_pdf">📄 PDF 다운로드</button>
+            <button class="btn btn-primary" onclick="exportToExcel()" data-i18n="reports.export_excel">📊 엑셀 다운로드</button>
+            <button class="btn btn-secondary" onclick="printReports()" data-i18n="reports.print">🖨️ 인쇄</button>
+            <button class="btn btn-secondary" onclick="loadTestData()" data-i18n="reports.test_data">🧪 테스트 데이터</button>
+            <button class="btn btn-warning" onclick="downloadBackup()" title="데이터 백업">💾 백업</button>
+            <button class="btn btn-danger" onclick="resetAllData(); console.log('초기화 버튼 클릭됨');" title="모든 데이터 초기화">🔄 초기화</button>
+        </div>
+
+        <!-- 보고서 완료 후 광고 (젠 전략 4번) -->
+        <div id="reportsCompletedAd" style="text-align: center; margin: 25px 0; padding: 20px; background: #f8f9fa; border-radius: 8px; display: none;">
+            <!--
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-YOUR_PUBLISHER_ID"
+                 data-ad-slot="YOUR_AD_SLOT_ID"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+            -->
+            <div style="padding: 25px; color: #495057; border: 2px dashed #dee2e6; border-radius: 6px;">
+                🎉 <strong>보고서 완료!</strong> 관련 도구들도 확인해보세요<br>
+                <small>완료 후 화면 = 높은 클릭률 구간</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="reports-grid">
+    <div class="card">
+        <h3>📋 대차대조표 (Balance Sheet)</h3>
+        <div id="balanceSheet"></div>
+    </div>
+
+    <div class="card">
+        <h3>📈 손익계산서 (Income Statement)</h3>
+        <div id="incomeStatement"></div>
+    </div>
+</div>
+
+<!-- 학회용 추가 리포트 -->
+<div class="card">
+    <h3>📋 학회 재무 요약 리포트</h3>
+    <div id="societyReport">
+        <div class="report-summary">
+            <div class="summary-section">
+                <h4>💰 주요 재무 지표</h4>
+                <div id="keyMetrics"></div>
+            </div>
+            <div class="summary-section">
+                <h4>📊 월별 수지 현황</h4>
+                <div id="monthlyStatus"></div>
+            </div>
+            <div class="summary-section">
+                <h4>🎯 예산 대비 실적 (향후 기능)</h4>
+                <div id="budgetComparison">
+                    <p class="no-data">예산 설정 기능을 준비 중입니다.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
